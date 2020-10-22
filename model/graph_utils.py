@@ -158,14 +158,14 @@ class GraphUtils(object):
         
         
         
-
-    
+        
+        
         #similarities = cosine_similarity(A)
         #print('pairwise dense output:\n {}\n'.format(similarities))
 
         #also can output sparse matrices
-        similarities_sparse = cosine_similarity(A,dense_output=False)
-        print('pairwise sparse output:\n {}\n'.format(similarities_sparse))
+        #similarities_sparse = cosine_similarity(AT,dense_output=False)
+        #print('pairwise sparse output:\n {}\n'.format(similarities_sparse))
         
         
     
@@ -187,8 +187,8 @@ class GraphUtils(object):
                 #print(R[i,j])
         
         #matrix_u = self.get_homogenous_graph(R, self.fw_u, index_row, index_row)     
-        #matrix_u = self.get_homogenous_graph(A_sparse.dot(AT_sparse), self.fw_u, index_row, index_row)       
-        #matrix_v = self.get_homogenous_graph(AT.dot(A), self.fw_v, index_item, index_item)
+        matrix_u = self.get_homogenous_graph(A.dot(AT), self.fw_u, index_row, index_row)       
+        matrix_v = self.get_homogenous_graph(AT.dot(A), self.fw_v, index_item, index_item)
         #self.G_u, self.walks_u = self.get_random_walks_restart_for_large_bipartite_graph(matrix_u, self.authority_u, percentage=percentage, maxT=maxT, minT=minT)
         #self.G_v, self.walks_v = self.get_random_walks_restart_for_large_bipartite_graph(matrix_v, self.authority_v, percentage=percentage, maxT=maxT, minT=minT)
         
