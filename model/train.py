@@ -348,7 +348,7 @@ def link_prediction(args):
     return metrics.auc(fpr,tpr), average_precision
 
 def train_by_sampling(args):
-    model_path = os.path.join('C:/Users/Administrator/Desktop/New_folder/experiment/rank', args.model_name)
+    model_path = os.path.join('../', args.model_name)
     if os.path.exists(model_path) is False:
         os.makedirs(model_path)
     alpha, beta, gamma, lam = args.alpha, args.beta, args.gamma, args.lam
@@ -358,7 +358,7 @@ def train_by_sampling(args):
     #datafile= os.path.join(model_path,"ratings.dat")
     dul = DataUtils(model_path)
     #dul.rename(datafile)
-    dul.split_data(args.testRatio)
+    #dul.split_data(args.testRatio)
     if args.rec:
         test_user, test_item, test_rate = dul.read_data(args.test_data)
     print("constructing graph....")
@@ -615,18 +615,18 @@ def main():
                             formatter_class=ArgumentDefaultsHelpFormatter,
                             conflict_handler='resolve')
 
-    parser.add_argument('--train-data', default=r'data/mooc/ratings_train.dat',
+    parser.add_argument('--train-data', default=r'../data/mooc/ratings_train.dat',
                         help='Input graph file.')
 
-    parser.add_argument('--test-data', default=r'data/mooc/ratings_test.dat')
+    parser.add_argument('--test-data', default=r'../data/mooc/ratings_test.dat')
 
-    parser.add_argument('--model-name', default='data/mooc',
+    parser.add_argument('--model-name', default='../data/mooc',
                         help='name of model.')
 
-    parser.add_argument('--vectors-u', default=r'data/mooc/vectors_u.dat',
+    parser.add_argument('--vectors-u', default=r'../data/mooc/vectors_u.dat',
                         help="file of embedding vectors of U")
 
-    parser.add_argument('--vectors-v', default=r'data/mooc/vectors_v.dat',
+    parser.add_argument('--vectors-v', default=r'../data/mooc/vectors_v.dat',
                         help="file of embedding vectors of V")
 
     parser.add_argument('--case-train', default=r'data/wiki/case_train.dat',
