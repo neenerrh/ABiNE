@@ -358,7 +358,7 @@ def train_by_sampling(args):
     #datafile= os.path.join(model_path,"ratings.dat")
     dul = DataUtils(model_path)
     #dul.rename(datafile)
-    #dul.split_data(args.testRatio)
+    dul.split_data(args.testRatio)
     if args.rec:
         test_user, test_item, test_rate = dul.read_data(args.test_data)
     print("constructing graph....")
@@ -376,6 +376,10 @@ def train_by_sampling(args):
     #one.v_load_data(args.v_graph_file,args.weighted,args.directed)
     #one.v_load_attr(args.v_attribute_file,args.method)  
     one.u_load_attr(args.u_attribute_file,args.method)   
+    
+     if args.uattr is True:
+        one.u_load_attr(args.u_attribute_file,args.method)   
+    
     one.v_load_attr(args.v_attribute_file,args.method)
     #vectors_u=one.u_embedding(args.method,args.dim,args.ABRW_topk,args.ABRW_beta,args.ABRW_beta_mode,args.ABRW_alpha,args.number_walks,args.walk_length,args.window_size,args.workers,args.save_emb,args.u_emb_file)
   
@@ -683,6 +687,8 @@ def main():
 
     parser.add_argument('--mode', default='hits', type=str,
                         help='metrics of centrality')
+    parser.add_argument('--uattr', default='False', type=str,
+                        help='when user attribute is available set True when not available set false')
     
      #-----------------------------------------------general settings--------------------------------------------------
     parser.add_argument('--graph_format', default='edgelist', choices=['adjlist', 'edgelist'],
