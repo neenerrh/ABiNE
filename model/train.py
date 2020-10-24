@@ -17,6 +17,7 @@ import pandas as pd
 from sklearn import metrics
 from one_mode import OneMode
 
+
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import average_precision_score,auc,precision_recall_fscore_support
 import time
@@ -355,7 +356,9 @@ def train_by_sampling(args):
     print('======== experiment settings =========')
     print('alpha : %0.4f, beta : %0.4f, gamma : %0.4f, lam : %0.4f, p : %0.4f, ws : %d, ns : %d, maxT : % d, minT : %d, max_iter : %d, d : %d' % (alpha, beta, gamma, lam, args.p, args.ws, args.ns,args.maxT,args.minT,args.max_iter, args.d))
     print('========== processing data ===========')
+    #model_path1=os.path.join('../content/ABiNE/', args.model_name)
     #datafile= os.path.join(model_path,"ratings.dat")
+ 
     dul = DataUtils(model_path)
     #dul.rename(datafile)
     dul.split_data(args.testRatio)
@@ -367,8 +370,8 @@ def train_by_sampling(args):
     edge_dict_u = gul.edge_dict_u
     edge_list = gul.edge_list
     walk_generator(gul,args)
-    model_path1 = os.path.join('C:/Users/Administrator/Desktop/New_folder/experiment/rank', 'model')    
-    one=OneMode(model_path1)
+    model_path1 = os.path.join('../', 'model')    
+    one=OneMode(model_path)
     
     one.u_load_data(args.u_graph_file,args.weighted,args.directed,args.graph_format,args.u_attribute_file,args.method)
     one.v_load_data(args.v_graph_file,args.weighted,args.directed,args.graph_format,args.v_attribute_file,args.method)
@@ -376,9 +379,9 @@ def train_by_sampling(args):
     #one.v_load_data(args.v_graph_file,args.weighted,args.directed)
     #one.v_load_attr(args.v_attribute_file,args.method)  
     one.u_load_attr(args.u_attribute_file,args.method)   
-    
-    if args.uattr is True:
-        one.u_load_attr(args.u_attribute_file,args.method)   
+    print(args.uattr)
+    #if args.uattr == True:
+        #one.u_load_attr(args.u_attribute_file,args.method)   
     
     one.v_load_attr(args.v_attribute_file,args.method)
     #vectors_u=one.u_embedding(args.method,args.dim,args.ABRW_topk,args.ABRW_beta,args.ABRW_beta_mode,args.ABRW_alpha,args.number_walks,args.walk_length,args.window_size,args.workers,args.save_emb,args.u_emb_file)
@@ -624,13 +627,13 @@ def main():
 
     parser.add_argument('--test-data', default=r'../data/mooc/ratings_test.dat')
 
-    parser.add_argument('--model-name', default='../data/mooc',
+    parser.add_argument('--model-name', default='data/mooc',
                         help='name of model.')
 
-    parser.add_argument('--vectors-u', default=r'../data/mooc/vectors_u.dat',
+    parser.add_argument('--vectors-u', default=r'/data/mooc/vectors_u.dat',
                         help="file of embedding vectors of U")
 
-    parser.add_argument('--vectors-v', default=r'../data/mooc/vectors_v.dat',
+    parser.add_argument('--vectors-v', default=r'/data/mooc/vectors_v.dat',
                         help="file of embedding vectors of V")
 
     parser.add_argument('--case-train', default=r'data/wiki/case_train.dat',
@@ -682,24 +685,24 @@ def main():
     parser.add_argument('--testRatio', type=float, default=0.80,
                         help="Test to training ratio.")
 
-    parser.add_argument('--large', default=1, type=int,
+    parser.add_argument('--large', default=0, type=int,
                         help='for large bipartite, 1 do not generate homogeneous graph file; 2 do not generate homogeneous graph')
 
     parser.add_argument('--mode', default='hits', type=str,
                         help='metrics of centrality')
-    parser.add_argument('--uattr', default='False', type=str,
+    parser.add_argument('--uattr', default='False', type=bool,
                         help='when user attribute is available set True when not available set false')
     
      #-----------------------------------------------general settings--------------------------------------------------
     parser.add_argument('--graph_format', default='edgelist', choices=['adjlist', 'edgelist'],
                         help='graph/network format')
-    parser.add_argument('--u_graph_file', default= r'data/mooc/homogeneous_u.dat',
+    parser.add_argument('--u_graph_file', default= r'../data/mooc/homogeneous_u.dat',
                         help='graph/network file')
-    parser.add_argument('--v_graph_file', default= r'data/mooc/homogeneous_v.dat',
+    parser.add_argument('--v_graph_file', default= r'../data/mooc/homogeneous_v.dat',
                         help='graph/network file')
-    parser.add_argument('--u_attribute_file', default=r'data/mooc/u_attr.txt',
+    parser.add_argument('--u_attribute_file', default=r'../data/mooc/u_attr.txt',
                         help='node attribute/feature file')
-    parser.add_argument('--v_attribute_file', default=r'data/mooc/v_attr.txt',
+    parser.add_argument('--v_attribute_file', default=r'../data/mooc/v_attr.txt',
                         help='node attribute/feature file')
     parser.add_argument('--label-file', default='data/cora/cora_label.txt',
                         help='node label file')     
@@ -717,9 +720,9 @@ def main():
                         help='weighted or unweighted graph')
     parser.add_argument('--save-emb', default=True, action='store_true',
                         help='save emb to disk if True')
-    parser.add_argument('--u-emb-file', default='emb/u_node_embs.txt',
+    parser.add_argument('--u-emb-file', default='../emb/u_node_embs.txt',
                         help='node embeddings file; suggest: data_method_dim_embs.txt')
-    parser.add_argument('--v-emb-file', default='emb/v_node_embs.txt',
+    parser.add_argument('--v-emb-file', default='../emb/v_node_embs.txt',
                         help='node embeddings file; suggest: data_method_dim_embs.txt')
     #-------------------------------------------------method settings-----------------------------------------------------------
     parser.add_argument('--method', default='abrw', choices=['deepwalk', 'node2vec', 'line', 'grarep',
