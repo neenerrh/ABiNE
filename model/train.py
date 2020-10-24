@@ -377,7 +377,7 @@ def train_by_sampling(args):
     #one.v_load_attr(args.v_attribute_file,args.method)  
     one.u_load_attr(args.u_attribute_file,args.method)   
     
-     if args.uattr is True:
+    if args.uattr is True:
         one.u_load_attr(args.u_attribute_file,args.method)   
     
     one.v_load_attr(args.v_attribute_file,args.method)
