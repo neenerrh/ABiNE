@@ -49,7 +49,7 @@ class ABRW(object):
         self.number_walks = number_walks
         self.walk_length = walk_length
         A=self.g.get_adj_mat(dense_output=False)
-        print(A)
+        
         X=self.g.get_attr_mat(dense_output=False)
         
         # obtain biased transition mat -----------
