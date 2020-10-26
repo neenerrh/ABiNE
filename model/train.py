@@ -384,12 +384,12 @@ def train_by_sampling(args):
         one.u_load_attr(args.u_attribute_file,args.method)   
     
     one.v_load_attr(args.v_attribute_file,args.method)
-    #vectors_u=one.u_embedding(args.method,args.dim,args.ABRW_topk,args.ABRW_beta,args.ABRW_beta_mode,args.ABRW_alpha,args.number_walks,args.walk_length,args.window_size,args.workers,args.save_emb,args.u_emb_file)
+    vectors_u=one.u_embedding(args.method,args.dim,args.ABRW_topk,args.ABRW_beta,args.ABRW_beta_mode,args.ABRW_alpha,args.number_walks,args.walk_length,args.window_size,args.workers,args.save_emb,args.u_emb_file)
   
    
     
 
-    #vectors_v=one.v_embedding(args.method,args.dim,args.ABRW_topk,args.ABRW_beta,args.ABRW_beta_mode,args.ABRW_alpha,args.number_walks,args.walk_length,args.window_size,args.workers,args.save_emb,args.v_emb_file)
+    vectors_v=one.v_embedding(args.method,args.dim,args.ABRW_topk,args.ABRW_beta,args.ABRW_beta_mode,args.ABRW_alpha,args.number_walks,args.walk_length,args.window_size,args.workers,args.save_emb,args.v_emb_file)
 
     
   
@@ -630,10 +630,10 @@ def main():
     parser.add_argument('--model-name', default='data/mooc',
                         help='name of model.')
 
-    parser.add_argument('--vectors-u', default=r'/data/mooc/vectors_u.dat',
+    parser.add_argument('--vectors-u', default=r'../data/mooc/vectors_u.dat',
                         help="file of embedding vectors of U")
 
-    parser.add_argument('--vectors-v', default=r'/data/mooc/vectors_v.dat',
+    parser.add_argument('--vectors-v', default=r'../data/mooc/vectors_v.dat',
                         help="file of embedding vectors of V")
 
     parser.add_argument('--case-train', default=r'data/wiki/case_train.dat',
