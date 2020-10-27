@@ -682,7 +682,7 @@ def main():
 
     parser.add_argument('--lip', default=0, type=int,
                         help='calculate the link prediction metrics.')
-    parser.add_argument('--testRatio', type=float, default=0.80,
+    parser.add_argument('--testRatio', type=float, default=0.20,
                         help="Test to training ratio.")
 
     parser.add_argument('--large', default=0, type=int,
@@ -733,7 +733,7 @@ def main():
                         help='select the most attr similar top k nodes of a node; ranging [0, # of nodes]')
     parser.add_argument('--ABRW-alpha', default=2.71828, type=float,
                         help='control the shape of characteristic curve of adaptive beta, ranging [0, inf]')
-    parser.add_argument('--ABRW-beta-mode', default=3, type=int,
+    parser.add_argument('--ABRW-beta-mode', default=2, type=int,
                         help='1: fixed; 2: adaptive based on average degree; 3: adaptive based on each node degree')
     parser.add_argument('--ABRW-beta', default=0.2, type=float,
                         help='balance struc and attr info; ranging [0, 1]; disabled if beta-mode 2 or 3')
