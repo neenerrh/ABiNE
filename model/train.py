@@ -370,7 +370,7 @@ def train_by_sampling(args):
  
     
     if args.rec:
-        test_user, test_item, test_rate = dul.read_data(args.test_data)
+        test_user, test_item, test_rate = dul.read_test_data(args.test_data)
     print("constructing graph....")
     gul = GraphUtils(model_path)
     gul.construct_training_graph(args.train_data)
