@@ -399,7 +399,7 @@ def train_by_sampling(args):
 
     
   
-   print("============== training ==============")
+    print("============== training ==============")
     
     if args.loss_function == 0 :
         pointwise(vectors_u,vectors_v, edge_list, edge_dict_u,args.max_iter,alpha, beta, gamma, lam)
