@@ -16,6 +16,7 @@ sys_path=sys.path.append('C:/Users/Administrator/Desktop/New_folder/experiment/B
 import pandas as pd
 from sklearn import metrics
 from one_mode import OneMode
+from BPRpython import BPR
 
 
 from sklearn.linear_model import LogisticRegression
@@ -358,10 +359,15 @@ def train_by_sampling(args):
     print('========== processing data ===========')
     #model_path1=os.path.join('../content/ABiNE/', args.model_name)
     #datafile= os.path.join(model_path,"ratings.dat")
- 
+    
     dul = DataUtils(model_path)
     #dul.rename(datafile)
-    dul.split_data(args.testRatio)
+    train_user,train_item,train_rate=dul.read_train_data(args.train_data)
+    n_train=len(train_item)
+    
+    dul.split_data(args.testRatio, args.loss_function)
+ 
+    
     if args.rec:
         test_user, test_item, test_rate = dul.read_data(args.test_data)
     print("constructing graph....")
@@ -393,11 +399,35 @@ def train_by_sampling(args):
 
     
   
+   print("============== training ==============")
+    
+    if args.loss_function == 0 :
+        pointwise(vectors_u,vectors_v, edge_list, edge_dict_u,args.max_iter,alpha, beta, gamma, lam)
         
+    else :
+        bpr=BPR(model_path,node_u_num,node_v_num,vectors_u,vectors_v,args.dim,n_train,train_user,train_item)  
+        vectors_u,vectors_v=bpr.fit()
+        
+     
+    save_to_file(vectors_u,vectors_v,model_path,args) 
+    
+    print("")
+    if args.rec:
+        print("============== testing ===============")
+        f1, map, mrr, mndcg = top_N(test_user,test_item,test_rate,vectors_u,vectors_v,args.top_n)
+        print('recommendation metrics: F1 : %0.4f, MAP : %0.4f, MRR : %0.4f, NDCG : %0.4f' % (round(f1,4), round(map,4), round(mrr,4), round(mndcg,4)))
+    if args.lip:
+        print("============== testing ===============")
+        auc_roc, auc_pr = link_prediction(args)
+        print('link prediction metrics: AUC_ROC : %0.4f, AUC_PR : %0.4f' % (round(auc_roc,4), round(auc_pr,4)))
+        
+def pointwise(vectors_u,vectors_v, edge_list, edge_dict_u,max_iter,alpha, beta, gamma, lam):
     last_loss, count, epsilon = 0, 0, 1e-3
-    print("============== training ==============")
-    for iter in range(0, args.max_iter):
-        s1 = "\r[%s%s]%0.2f%%"%("*"* iter," "*(args.max_iter-iter),iter*100.0/(args.max_iter-1))
+ 
+    
+    
+    for iter in range(0, max_iter):
+        s1 = "\r[%s%s]%0.2f%%"%("*"* iter," "*(max_iter-iter),iter*100.0/(max_iter-1))
         loss = 0
         random.shuffle(edge_list)
         for i in range(len(edge_list)):
@@ -418,25 +448,11 @@ def train_by_sampling(args):
         else:
             lam *= 0.95
         last_loss = loss
+        
         if delta_loss < epsilon:
             break
         sys.stdout.write(s1)
         sys.stdout.flush()
-    
-     
-    save_to_file(vectors_u,vectors_v,model_path,args)  
-    
-    
-    print("")
-    if args.rec:
-        print("============== testing ===============")
-        f1, map, mrr, mndcg = top_N(test_user,test_item,test_rate,vectors_u,vectors_v,args.top_n)
-        print('recommendation metrics: F1 : %0.4f, MAP : %0.4f, MRR : %0.4f, NDCG : %0.4f' % (round(f1,4), round(map,4), round(mrr,4), round(mndcg,4)))
-    if args.lip:
-        print("============== testing ===============")
-        auc_roc, auc_pr = link_prediction(args)
-        print('link prediction metrics: AUC_ROC : %0.4f, AUC_PR : %0.4f' % (round(auc_roc,4), round(auc_pr,4)))
-    
 def ndarray_tostring(array):
     string = ""
     for item in array:
@@ -450,6 +466,20 @@ def save_to_file(vectors_u,vectors_v,model_path,args):
     with open(args.vectors_v,"w") as fw_v:
         for v in vectors_v.keys():
             fw_v.write(v+" "+ndarray_tostring(vectors_v[v])) 
+     
+    
+    
+    print("")
+    if args.rec:
+        print("============== testing ===============")
+        f1, map, mrr, mndcg = top_N(test_user,test_item,test_rate,vectors_u,vectors_v,args.top_n)
+        print('recommendation metrics: F1 : %0.4f, MAP : %0.4f, MRR : %0.4f, NDCG : %0.4f' % (round(f1,4), round(map,4), round(mrr,4), round(mndcg,4)))
+    if args.lip:
+        print("============== testing ===============")
+        auc_roc, auc_pr = link_prediction(args)
+        print('link prediction metrics: AUC_ROC : %0.4f, AUC_PR : %0.4f' % (round(auc_roc,4), round(auc_pr,4)))
+    
+
             #one.u_embedding(args.method,args.ABRW_alpha,args.ABRW_topk,args.number_walks,args.walk_length,args.window_size,args.workers,args.dim,args.save_emb,args.emb_file)       
     
      # my getting negs samples
@@ -690,6 +720,8 @@ def main():
 
     parser.add_argument('--mode', default='hits', type=str,
                         help='metrics of centrality')
+    parser.add_argument('--loss_function', default=0, type=int,
+                        help='0-pointwise loss function, 1-pairwise loss function')
     parser.add_argument('--uattr', default=False, type=bool,
                         help='when user attribute is available set True when not available set false')
     
