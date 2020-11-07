@@ -51,7 +51,23 @@ class DataUtils(object):
                         ftest.write(u + "\t" + item + "\t" + rating[u][item] + "\n")
         return test_user, test_item, test_rate
 
-    def read_data(self,filename=None):
+    
+    def read_train_data(self,filename=None):
+        if filename is None:
+            filename = os.path.join(self.model_path,"ratings_train.dat")
+        users,items,rates = set(), set(), {}
+        with open(filename, "r", encoding="UTF-8") as fin:
+            line = fin.readline()
+            while line:
+                user, item, rate = line.strip().split()
+                if rates.get(user) is None:
+                    rates[user] = {}
+                rates[user][item] = float(rate)
+                users.add(user)
+                items.add(item)
+                line = fin.readline()
+        return users, items, rates
+    def read_test_data(self,filename=None):
         if filename is None:
             filename = os.path.join(self.model_path,"ratings_test.dat")
         users,items,rates = set(), set(), {}
