@@ -21,12 +21,13 @@ class BPR(object):
         self.user_count = node_u_num
         #print(self.user_count)
         self.item_count = node_v_num
+        self.model_path=model_path
         #latent_factors = 20
         self.lr = 0.01
         self.reg = 0.01
         self.train_count = 1000
-        self.train_data_path = 'C:/Users/Administrator/Desktop/New_folder/experiment/Bine1rank/data/mvl/ratings_train.dat'
-        self.test_data_path = 'C:/Users/Administrator/Desktop/New_folder/experiment/Bine1rank/data/mvl/ratings_train.dat'
+        self.train_data_path = os.path.join(self.model_path,"ratings_train.dat")
+        self.test_data_path = os.path.join(self.model_path,"ratings_test.dat")
         self.size_u_i = self.user_count * self.item_count
     # latent_factors of U & V
         self.U = vectors_u
