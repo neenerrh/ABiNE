@@ -361,11 +361,12 @@ def train_by_sampling(args):
     #datafile= os.path.join(model_path,"ratings.dat")
     
     dul = DataUtils(model_path)
+    dul.split_data(args.testRatio, args.loss_function)
     #dul.rename(datafile)
     train_user,train_item,train_rate=dul.read_train_data(args.train_data)
     n_train=len(train_item)
     
-    dul.split_data(args.testRatio, args.loss_function)
+    
  
     
     if args.rec:
