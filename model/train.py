@@ -720,7 +720,7 @@ def main():
 
     parser.add_argument('--mode', default='hits', type=str,
                         help='metrics of centrality')
-    parser.add_argument('--loss_function', default=0, type=int,
+    parser.add_argument('--loss_function', default=1, type=int,
                         help='0-pointwise loss function, 1-pairwise loss function')
     parser.add_argument('--uattr', default=False, type=bool,
                         help='when user attribute is available set True when not available set false')
