@@ -406,7 +406,7 @@ def train_by_sampling(args):
         pointwise(vectors_u,vectors_v, edge_list, edge_dict_u,args.max_iter,alpha, beta, gamma, lam)
         
     else :
-        bpr=BPR(model_path,node_u_num,node_v_num,vectors_u,vectors_v,args.dim,n_train,train_user,train_item)  
+        bpr=BPR(model_path,vectors_u,vectors_v,args.dim,n_train,train_user,train_item)  
         vectors_u,vectors_v=bpr.fit()
         
      
