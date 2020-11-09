@@ -23,7 +23,7 @@ class DataUtils(object):
                     fw.write(user + "\t" + item + "\t" + rating + "\n")
                     line = fin.readline()
 
-     def split_data(self, percent,loss_function):
+    def split_data(self, percent,loss_function):
         """
         split data
         :param percent:
