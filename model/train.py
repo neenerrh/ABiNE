@@ -753,9 +753,9 @@ def main():
                         help='weighted or unweighted graph')
     parser.add_argument('--save-emb', default=True, action='store_true',
                         help='save emb to disk if True')
-    parser.add_argument('--u-emb-file', default='../emb/u_node_embs.txt',
+    parser.add_argument('--u-emb-file', default='../data/mooc/emb/u_node_embs.txt',
                         help='node embeddings file; suggest: data_method_dim_embs.txt')
-    parser.add_argument('--v-emb-file', default='../emb/v_node_embs.txt',
+    parser.add_argument('--v-emb-file', default='../data/mooc/emb/v_node_embs.txt',
                         help='node embeddings file; suggest: data_method_dim_embs.txt')
     #-------------------------------------------------method settings-----------------------------------------------------------
     parser.add_argument('--method', default='abrw', choices=['deepwalk', 'node2vec', 'line', 'grarep',
