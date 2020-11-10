@@ -115,7 +115,7 @@ class OneMode(object):
             
             model = abrw.ABRW(graph=self.g_u, dim=dim, topk=ABRW_topk,beta=ABRW_beta, beta_mode=ABRW_beta_mode,alpha=ABRW_alpha, number_walks=number_walks,walk_length=walk_length, window=window_size, workers=workers)
             
-            node_u_num= model.save_embeddings(emb_file + time.strftime(' %Y%m%d-%H%M%S', time.localtime()))
+            node_u_num,users= model.save_embeddings(emb_file + time.strftime(' %Y%m%d-%H%M%S', time.localtime()))
             print(f'Save node embeddings in file: {emb_file}')
             
         elif method == 'aane':
@@ -141,7 +141,7 @@ class OneMode(object):
         print(f'STEP3: end learning embeddings; time cost: {(t2-t1):.2f}s')
         vectors_u=model.vectors
         #print(vectors_u)
-        return vectors_u,node_u_num
+        return vectors_u,node_u_num,users
         
      
            
@@ -157,7 +157,7 @@ class OneMode(object):
             model = abrw.ABRW(graph=self.g_v, dim=dim, topk=ABRW_topk,beta=ABRW_beta, beta_mode=ABRW_beta_mode,alpha=ABRW_alpha, number_walks=number_walks,walk_length=walk_length, window=window_size, workers=workers)
             #model.save_embeddings(emb_file + time.strftime(' %Y%m%d-%H%M%S', time.localtime()))
             #print(f'Save node embeddings in file: {emb_file}')
-            node_v_num=model.save_embeddings(emb_file + time.strftime(' %Y%m%d-%H%M%S', time.localtime()))
+            node_v_num,items=model.save_embeddings(emb_file + time.strftime(' %Y%m%d-%H%M%S', time.localtime()))
             print(f'Save node embeddings in file: {emb_file}')
         elif method == 'aane':
             model = aane.AANE(graph=g, dim=args.dim, lambd=args.AANE_lamb, rho=args.AANE_rho, maxiter=args.AANE_maxiter, 
@@ -182,7 +182,7 @@ class OneMode(object):
         print(f'STEP3: end learning embeddings; time cost: {(t2-t1):.2f}s')
         vectors_v=model.vectors
         #print(vectors_v)
-        return vectors_v,node_v_num
+        return vectors_v,node_v_num,items
     
     def downstream(self):
         #---------------------------------------STEP4: downstream task-----------------------------------------------
