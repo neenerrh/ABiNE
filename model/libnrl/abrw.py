@@ -57,7 +57,7 @@ class ABRW(object):
       
         # aim to generate a sequences of walks/sentences
         # apply weighted random walks on the reconstructed network based on biased transition mat
-        kwargs["workers"] = kwargs.get("workers", 8)
+        kwargs["workers"] = kwargs.get("workers", 20)
         weighted_walker = walker.WeightedWalker(node_id_map=self.g.look_back_list, transition_mat=self.T, workers=kwargs["workers"])  # instance weighted walker
         sentences = weighted_walker.simulate_walks(num_walks=self.number_walks, walk_length=self.walk_length)
 
@@ -211,7 +211,7 @@ class ABRW(object):
         for node, vec in self.vectors.items():
             fout.write("{} {}\n".format(node, ' '.join([str(x) for x in vec])))
         fout.close()
-        return node_num
+        return node_num,self.vectors.keys()
 
 
 # ------------------------ utils draw_characteristic_curve ---------------------------
