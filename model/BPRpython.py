@@ -27,8 +27,8 @@ class BPR(object):
         self.lr = lam  #learning rate
         self.reg = 0.01
         self.train_count = 1000
-        self.train_data_path = 'C:/Users/Administrator/Desktop/New_folder/experiment/Bine1rank/data/mvl/ratings_train.dat'
-        self.test_data_path = 'C:/Users/Administrator/Desktop/New_folder/experiment/Bine1rank/data/mvl/ratings_train.dat'
+        self.train_data_path = '../data/mooc/ratings_train.dat'
+        self.test_data_path = '../data/mooc/ratings_train.dat'
         self.size_u_i = self.user_count * self.item_count
     # latent_factors of U & V
         self.U = vectors_u
