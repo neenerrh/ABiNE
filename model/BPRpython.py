@@ -17,11 +17,13 @@ class BPR(object):
     num_k : item embedding的維度大小
     evaluation_at : recall@多少，及正樣本要排前幾名，我們才視為推薦正確
     '''
-    def __init__(self,model_path,node_u_num,node_v_num,vectors_u,vectors_v,dim,n_train,n_user,train_item,users,items,n_epochs=10,batch_size=512,lam):
+    def __init__(self,model_path,node_u_num,node_v_num,vectors_u,vectors_v,users,items,n_train,train_user,train_item,dim,lam):
         self.user_count = node_u_num
         #print(self.user_count)
         self.item_count = node_v_num
         #latent_factors = 20
+        self.n_epochs=10
+        self.batch_size=512
         self.lr = lam  #learning rate
         self.reg = 0.01
         self.train_count = 1000
