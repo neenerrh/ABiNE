@@ -64,7 +64,7 @@ class BPR(object):
             # sample a user
             #u = random.randint(1, self.user_count)
             u = random.sample(self.users,1)
-            if u not in user_ratings_train.keys():
+            if str(u) not in user_ratings_train.keys():
                 continue
             # sample a positive item from the observed items
             i = random.sample(user_ratings_train[u], 1)[0]
