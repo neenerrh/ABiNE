@@ -113,7 +113,7 @@ class Graph(object):
     # ------------------------------------------------------------------------------------------
     # --------------------commonly used APIs that will not modify graph-------------------------
     # ------------------------------------------------------------------------------------------
-    def get_adj_mat(self, dense_output=True):
+    def get_adj_mat(self, dense_output=False):
         """ return adjacency matrix; \n
             use 'csr' format for sparse matrix \n
         """
@@ -122,7 +122,7 @@ class Graph(object):
         else:
             return nx.to_scipy_sparse_matrix(self.G, nodelist=self.look_back_list, format='csr', dtype='float64')
 
-    def get_attr_mat(self, dense_output=True):
+    def get_attr_mat(self, dense_output=False):
         """ return attribute matrix; \n
             use 'csr' format for sparse matrix \n
         """
