@@ -108,13 +108,13 @@ class BPR(object):
     def fit(self):
         user_ratings_train = self.load_data(self.train_data_path)
         self.load_test_data(self.test_data_path)
-        for u in range(self.user_count):
-            for item in range(self.item_count):
-                if int(self.test_data[u][item]) == 1:
-                    self.test[u * self.item_count + item] = 1
-                else:
-                    self.test[u * self.item_count + item] = 0
-        # training
+        #self.load_test_data(self.test_data_path)
+        #for u in range(self.user_count):
+            #for item in range(self.item_count):
+                #if int(self.test_data[u][item]) == 1:
+                    #self.test[u * self.item_count + item] = 1
+                #else:
+                    #self.test[u * self.item_count + item] = 0
         for i in range(self.train_count):
             self.train(user_ratings_train)
         return self.U,self.V
