@@ -472,15 +472,7 @@ def save_to_file(vectors_u,vectors_v,model_path,args):
      
     
     
-    print("")
-    if args.rec:
-        print("============== testing ===============")
-        f1, map, mrr, mndcg = top_N(test_user,test_item,test_rate,vectors_u,vectors_v,args.top_n)
-        print('recommendation metrics: F1 : %0.4f, MAP : %0.4f, MRR : %0.4f, NDCG : %0.4f' % (round(f1,4), round(map,4), round(mrr,4), round(mndcg,4)))
-    if args.lip:
-        print("============== testing ===============")
-        auc_roc, auc_pr = link_prediction(args)
-        print('link prediction metrics: AUC_ROC : %0.4f, AUC_PR : %0.4f' % (round(auc_roc,4), round(auc_pr,4)))
+    
     
 
             #one.u_embedding(args.method,args.ABRW_alpha,args.ABRW_topk,args.number_walks,args.walk_length,args.window_size,args.workers,args.dim,args.save_emb,args.emb_file)       
