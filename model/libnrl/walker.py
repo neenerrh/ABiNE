@@ -23,8 +23,11 @@ class WeightedWalker:
         self.look_back_list = node_id_map
         self.T = transition_mat
         self.workers = workers
+        self.T.shape
+        print("DIrected Graph")
         # self.rec_G = nx.to_networkx_graph(self.T, create_using=nx.Graph())  # wrong... will return symt transition mat
         self.rec_G = nx.to_networkx_graph(self.T, create_using=nx.DiGraph())  # reconstructed "directed" "weighted" graph based on transition matrix
+        print('Done')
         # print(nx.adjacency_matrix(self.rec_G).todense()[0:6, 0:6])
         # print(transition_mat[0:6, 0:6])
         # print(nx.adjacency_matrix(self.rec_G).todense()==transition_mat)
