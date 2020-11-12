@@ -59,12 +59,16 @@ class BPR(object):
             self.test_data[user][item] = line[2]
 
     def train(self, user_ratings_train):
-   
+        print(user_ratings_train.keys()
         for user in range(self.user_count):
             # sample a user
             #u = random.randint(1, self.user_count)
             u = random.sample(self.users,1)
+            print(f"u {u} ")
+            
             if str(u) not in user_ratings_train.keys():
+                print(f"string u {str(u)} ")
+             
                 continue
             # sample a positive item from the observed items
             i = random.sample(user_ratings_train[u], 1)[0]
@@ -73,15 +77,19 @@ class BPR(object):
             j = random.sample(self.items, 1)
             while j in user_ratings_train[u]:
                 j = random.sample(self.items, 1)
-            a=u
+            print(f"i {i} ")
+            print(f"z {z} ")
+          
             b=i
             c=j
             
-           
+            print(f"b {b} ")
+            print(f"c {c} ")
             b-=1
             c-=1
-            print(i)
-            print(z)
+            print(f"b {b} ")
+            print(f"c {c} ")
+            
             
             r_ui = np.dot(self.U[str(u)], self.V[str(i)].T) + self.biasV[b]
             r_uj = np.dot(self.U[str(u)], self.V[str(j)].T) + self.biasV[c]
