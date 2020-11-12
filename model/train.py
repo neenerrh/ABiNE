@@ -707,7 +707,7 @@ def main():
 
     parser.add_argument('--lip', default=0, type=int,
                         help='calculate the link prediction metrics.')
-    parser.add_argument('--testRatio', type=float, default=0.20,
+    parser.add_argument('--testRatio', type=float, default=0.40,
                         help="Test to training ratio.")
 
     parser.add_argument('--large', default=0, type=int,
