@@ -32,6 +32,7 @@ class WeightedWalker:
     # alias sampling for ABRW-------------------------
     def simulate_walks(self, num_walks, walk_length):
         t1 = time.time()
+        print("Constructing alias table")
         self.preprocess_transition_probs(weighted_G=self.rec_G)  # construct alias table; adapted from node2vec
         t2 = time.time()
         print(f'Time for construct alias table: {(t2-t1):.2f}')
