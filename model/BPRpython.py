@@ -59,7 +59,7 @@ class BPR(object):
             self.test_data[user][item] = line[2]
 
     def train(self, user_ratings_train):
-        print(user_ratings_train.keys())
+        #print(user_ratings_train.keys())
         for user in range(self.user_count):
             # sample a user
             #u = random.randint(1, self.user_count)
