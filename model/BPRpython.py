@@ -17,7 +17,7 @@ class BPR(object):
     num_k : item embedding的維度大小
     evaluation_at : recall@多少，及正樣本要排前幾名，我們才視為推薦正確
     '''
-    def __init__(self,model_path,node_u_num,node_v_num,vectors_u,vectors_v,users,items,n_train,train_user,train_item,dim,lam):
+    def __init__(self,model_path,node_u_num,node_v_num,vectors_u,vectors_v,users,items,items_list,n_train,train_user,train_item,dim,lam):
         self.user_count = node_u_num
         #print(self.user_count)
         self.item_count = node_v_num
@@ -39,6 +39,7 @@ class BPR(object):
         predict_ = np.zeros(self.size_u_i)
         self.users=users
         self.items=items
+        self.items_list=items_list
 
     def load_data(self, path):
         user_ratings = defaultdict(set)
@@ -59,7 +60,7 @@ class BPR(object):
             self.test_data[user][item] = line[2]
 
     def train(self, user_ratings_train):
-        self.biasV=dict(zip(items,self.V))
+        self.biasV=dict(zip(self.items_list,self.V))
         #print(user_ratings_train.keys())
         for user in range(self.user_count):
             # sample a user
