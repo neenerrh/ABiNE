@@ -5,6 +5,7 @@ __author__ = 'CLH'
 from argparse import ArgumentParser, FileType, ArgumentDefaultsHelpFormatter
 import sys
 import numpy as np
+from scipy import linalg
 from sklearn import preprocessing
 from data_utils import DataUtils
 from graph_utils import GraphUtils
@@ -199,10 +200,15 @@ def top_N(test_u, test_v, test_rate, vectors_u, vectors_v, top_n):
                 pre = 0
             else:
                 U = np.array(vectors_u[u])
+                print(np.sum(np.square(U)))
+                numpy.linalg.norm(x, ord=None, axis=None, keepdims=False)
+                U = np.linalg.norm(U, axis = 1, keepdims=True)
+                print(np.sum(np.square(U)))
                 if vectors_v.get(v) is None:
                     pre = 0
                 else:
                     V = np.array(vectors_v[v])
+                    V = np.linalg.norm(V, axis = 1, keepdims=True)
                     pre = U.dot(V.T)
             recommend_dict[u][v] = float(pre)
 
