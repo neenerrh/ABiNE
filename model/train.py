@@ -699,7 +699,7 @@ def main():
     parser.add_argument('--gamma', default=0.1, type=float,
                         help='trade-off parameter gamma.')
 
-    parser.add_argument('--lam', default=0.025, type=float,
+    parser.add_argument('--lam', default=0.01, type=float,
                         help='learning rate lambda.')
     parser.add_argument('--max-iter', default=100, type=int,
                         help='maximal number of iterations.')
