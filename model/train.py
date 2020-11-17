@@ -367,10 +367,10 @@ def train_by_sampling(args):
     n_train=len(train_item)
     test_user, test_item, test_rate = dul.read_test_data(args.test_data)
     #list of all items
-    items=train_items + list(test_items)
-        res2 = [] 
-        [res2.append(x) for x in items if x not in res2]
-        items=res2   
+    items_list=list(train_item) + list(test_item)
+    res2 = [] 
+    [res2.append(x) for x in items_list if x not in res2]
+    items_list=res2   
     
  
     
