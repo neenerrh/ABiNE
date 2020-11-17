@@ -365,7 +365,12 @@ def train_by_sampling(args):
     #dul.rename(datafile)
     train_user,train_item,train_rate=dul.read_train_data(args.train_data)
     n_train=len(train_item)
-    
+    test_user, test_item, test_rate = dul.read_test_data(args.test_data)
+    #list of all items
+    items=train_items + list(test_items)
+        res2 = [] 
+        [res2.append(x) for x in items if x not in res2]
+        items=res2   
     
  
     
@@ -408,7 +413,7 @@ def train_by_sampling(args):
         pointwise(vectors_u,vectors_v, edge_list, edge_dict_u,args.max_iter,alpha, beta, gamma, lam)
         
     else :
-        bpr=BPR(model_path,node_u_num,node_v_num,vectors_u,vectors_v,users,items,n_train,train_user,train_item,args.dim,args.lam) 
+        bpr=BPR(model_path,node_u_num,node_v_num,vectors_u,vectors_v,users,items,items_list,n_train,train_user,train_item,args.dim,args.lam) 
         vectors_u,vectors_v=bpr.fit()
         
      
