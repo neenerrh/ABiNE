@@ -110,6 +110,8 @@ class BPR(object):
 
     def fit(self):
         user_ratings_train = self.load_data(self.train_data_path)
+        self.biasV=dict(zip(self.items_list,self.V))
+        print(self.biasV)
         #self.load_test_data(self.test_data_path)
         #self.load_test_data(self.test_data_path)
         #for u in range(self.user_count):
