@@ -59,20 +59,21 @@ class BPR(object):
             self.test_data[user][item] = line[2]
 
     def train(self, user_ratings_train):
+        self.biasV=dict(zip(items,self.V))
         #print(user_ratings_train.keys())
         for user in range(self.user_count):
             # sample a user
             #u = random.randint(1, self.user_count)
             u = random.sample(self.users,1)
-            print(f"u {u} ")
+            #print(f"u {u} ")
             
-            if str(u) not in user_ratings_train.keys():
-                print(f"string u {str(u)} ")
+            if u not in user_ratings_train.keys():
+                #print(f"string u {str(u)} ")
              
                 continue
             # sample a positive item from the observed items
-            i = random.sample(user_ratings_train[u], 1)[0]
-            z = random.sample(user_ratings_train[u], 1)
+            i = random.sample(user_ratings_train[u].keys(), 1)
+            #z = random.sample(user_ratings_train[u], 1)
             # sample a negative item from the unobserved items
             j = random.sample(self.items, 1)
             while j in user_ratings_train[u]:
@@ -80,19 +81,12 @@ class BPR(object):
             print(f"i {i} ")
             print(f"z {z} ")
           
-            b=i
-            c=j
-            
-            print(f"b {b} ")
-            print(f"c {c} ")
-            b-=1
-            c-=1
-            print(f"b {b} ")
-            print(f"c {c} ")
             
             
-            r_ui = np.dot(self.U[str(u)], self.V[str(i)].T) + self.biasV[b]
-            r_uj = np.dot(self.U[str(u)], self.V[str(j)].T) + self.biasV[c]
+           
+            
+            r_ui = np.dot(self.U[str(u)], self.V[str(i)].T) + self.biasV[str(i)]
+            r_uj = np.dot(self.U[str(u)], self.V[str(j)].T) + self.biasV[str(j)]
             r_uij = r_ui - r_uj
             loss_func = -1.0 / (1 + np.exp(r_uij))
             
@@ -105,8 +99,8 @@ class BPR(object):
             self.V[str(i)] += -self.lr * (loss_func * self.U[str(u)] + self.reg * self.V[str(i)])
             self.V[str(j)] += -self.lr * (loss_func * (-self.U[str(u)]) + self.reg * self.V[str(j)])
             #update biasV
-            self.biasV[b] += -self.lr * (loss_func + self.reg * self.biasV[b])
-            self.biasV[c] += -self.lr * (-loss_func + self.reg * self.biasV[c])
+            self.biasV[str(i)] += -self.lr * (loss_func + self.reg * self.biasV[str(i)])
+            self.biasV[str(j)] += -self.lr * (-loss_func + self.reg * self.biasV[j])
 
     def predict(self, user, item):
         #predict = np.mat(user) * np.mat(item.T)
