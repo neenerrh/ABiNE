@@ -68,7 +68,7 @@ class BPR(object):
             u = random.sample(self.users,1)
             #print(f"u {u} ")
             
-            if u not in user_ratings_train.keys():
+            if str(u) not in user_ratings_train.keys():
                 #print(f"string u {str(u)} ")
              
                 continue
