@@ -201,14 +201,14 @@ def top_N(test_u, test_v, test_rate, vectors_u, vectors_v, top_n):
             else:
                 U = np.array(vectors_u[u])
                 print(np.sum(np.square(U)))
-                numpy.linalg.norm(x, ord=None, axis=None, keepdims=False)
-                U = np.linalg.norm(U, axis = 1, keepdims=True)
+                #numpy.linalg.norm(x, ord=None, axis=None, keepdims=False)
+                U = np.linalg.norm(U, keepdims=True)
                 print(np.sum(np.square(U)))
                 if vectors_v.get(v) is None:
                     pre = 0
                 else:
                     V = np.array(vectors_v[v])
-                    V = np.linalg.norm(V, axis = 1, keepdims=True)
+                    V = np.linalg.norm(V, keepdims=True)
                     pre = U.dot(V.T)
             recommend_dict[u][v] = float(pre)
 
