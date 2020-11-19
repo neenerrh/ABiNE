@@ -27,7 +27,7 @@ class BPR(object):
         self.lr = lam  #learning rate
         self.reg = 0.01
         self.train_count = 1000
-        self.train_data_path = '../data/mooc/ratings_train.dat'
+        self.train_data_path = '../data/mooc/ratings_test.dat'
         self.test_data_path = '../data/mooc/ratings_train.dat'
         self.size_u_i = self.user_count * self.item_count
     # latent_factors of U & V
@@ -60,7 +60,7 @@ class BPR(object):
             self.test_data[user][item] = line[2]
 
     def train(self, user_ratings_train):
-        self.biasV=dict(zip(self.items_list,self.V))
+        
         #print(user_ratings_train.keys())
         for user in range(self.user_count):
             # sample a user
@@ -79,8 +79,7 @@ class BPR(object):
             j = random.sample(self.items, 1)
             while j in user_ratings_train[u]:
                 j = random.sample(self.items, 1)
-            print(f"i {i} ")
-            print(f"z {z} ")
+            
           
             
             
@@ -111,7 +110,7 @@ class BPR(object):
     def fit(self):
         user_ratings_train = self.load_data(self.train_data_path)
         self.biasV=dict(zip(self.items_list,self.V))
-        print(self.biasV)
+       
         #self.load_test_data(self.test_data_path)
         #self.load_test_data(self.test_data_path)
         #for u in range(self.user_count):
