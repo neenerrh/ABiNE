@@ -800,7 +800,7 @@ def main():
     parser.add_argument('--LINE-negative-ratio', default=5, type=int,
                         help='the negative ratio')
     # for walk based methods; some Word2Vec SkipGram parameters are not specified here
-    parser.add_argument('--number-walks', default=10, type=int,
+    parser.add_argument('--number-walks', default=3, type=int,
                         help='# of random walks of each node')
     parser.add_argument('--walk-length', default=80, type=int,
                         help='length of each random walk')
