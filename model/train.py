@@ -211,7 +211,7 @@ def top_N(test_u, test_v, test_rate, vectors_u, vectors_v, top_n):
                     V = V/np.linalg.norm(V)
                     pre = U.dot(V.T)
             recommend_dict[u][v] = float(pre)
-
+    
     precision_list = []
     recall_list = []
     ap_list = []
@@ -220,7 +220,7 @@ def top_N(test_u, test_v, test_rate, vectors_u, vectors_v, top_n):
 
     for u in test_u:
         
-
+        print(recommend_dict[u]
         from functools import cmp_to_key
         def cmp(x, y):                   # emulate cmp from Python 2
             if (x< y):
@@ -230,7 +230,10 @@ def top_N(test_u, test_v, test_rate, vectors_u, vectors_v, top_n):
             elif (x > y):
                 return 1
         tmp_r = sorted(recommend_dict[u].items(), key=cmp_to_key(lambda x, y: cmp(x[1], y[1])), reverse=True)[0:min(len(recommend_dict[u]),top_n)]
+        print(tmp_r)
+        
         tmp_t = sorted(test_rate[u].items(), key=cmp_to_key(lambda x, y: cmp(x[1], y[1])), reverse=True)[0:min(len(test_rate[u]),top_n)]
+        print(tmp_t)         
         tmp_r_list = []
         tmp_t_list = []
         for (item, rate) in tmp_r:
