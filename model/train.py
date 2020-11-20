@@ -200,15 +200,15 @@ def top_N(test_u, test_v, test_rate, vectors_u, vectors_v, top_n):
                 pre = 0
             else:
                 U = np.array(vectors_u[u])
-                print(np.sum(np.square(U)))
+                #print(np.sum(np.square(U)))
                 #numpy.linalg.norm(x, ord=None, axis=None, keepdims=False)
-                U = np.linalg.norm(U, keepdims=True)
-                print(np.sum(np.square(U)))
+                U = U/np.linalg.norm(U)
+                #print(np.sum(np.square(U)))
                 if vectors_v.get(v) is None:
                     pre = 0
                 else:
                     V = np.array(vectors_v[v])
-                    V = np.linalg.norm(V, keepdims=True)
+                    V = V/np.linalg.norm(V)
                     pre = U.dot(V.T)
             recommend_dict[u][v] = float(pre)
 
@@ -384,7 +384,7 @@ def train_by_sampling(args):
         test_user, test_item, test_rate = dul.read_test_data(args.test_data)
     print("constructing graph....")
     gul = GraphUtils(model_path)
-    gul.construct_training_graph(args.train_data)
+    gul.construct_training_graph(None)
     edge_dict_u = gul.edge_dict_u
     edge_list = gul.edge_list
     walk_generator(gul,args)
@@ -658,10 +658,10 @@ def main():
                             formatter_class=ArgumentDefaultsHelpFormatter,
                             conflict_handler='resolve')
 
-    parser.add_argument('--train-data', default=r'../data/mooc/ratings_train.dat',
+    parser.add_argument('--train-data', default=r'../data/mooc/ratings_test.dat',
                         help='Input graph file.')
 
-    parser.add_argument('--test-data', default=r'../data/mooc/ratings_test.dat')
+    parser.add_argument('--test-data', default=r'../data/mooc/ratings_train.dat')
 
     parser.add_argument('--model-name', default='data/mooc',
                         help='name of model.')
