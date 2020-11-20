@@ -18,7 +18,7 @@ import pandas as pd
 from sklearn import metrics
 from one_mode import OneMode
 from BPRpython import BPR
-
+from functools import cmp_to_key
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import average_precision_score,auc,precision_recall_fscore_support
@@ -220,7 +220,7 @@ def top_N(test_u, test_v, test_rate, vectors_u, vectors_v, top_n):
 
     for u in test_u:
         
-        print(recommend_dict[u]
+        print(recommend_dict[u])
         from functools import cmp_to_key
         def cmp(x, y):                   # emulate cmp from Python 2
             if (x< y):
