@@ -26,7 +26,7 @@ class BPR(object):
         self.batch_size=512
         self.lr = lam  #learning rate
         self.reg = 0.01
-        self.train_count = 1000
+        self.train_count = 10
         self.train_data_path = '../data/mooc/ratings_test.dat'
         self.test_data_path = '../data/mooc/ratings_train.dat'
         self.size_u_i = self.user_count * self.item_count
@@ -67,40 +67,48 @@ class BPR(object):
             #u = random.randint(1, self.user_count)
             u = random.sample(self.users,1)
             #print(f"u {u} ")
-            
+            u=u[0]
             if str(u) not in user_ratings_train.keys():
                 #print(f"string u {str(u)} ")
              
                 continue
             # sample a positive item from the observed items
-            i = random.sample(user_ratings_train[u].keys(), 1)
+            i = random.sample(user_ratings_train[u], 1)
+            i=i[0]
             #z = random.sample(user_ratings_train[u], 1)
             # sample a negative item from the unobserved items
             j = random.sample(self.items, 1)
+            j=j[0]
             while j in user_ratings_train[u]:
                 j = random.sample(self.items, 1)
-            
-          
-            
-            
+                j=j[0]
            
             
-            r_ui = np.dot(self.U[str(u)], self.V[str(i)].T) + self.biasV[str(i)]
-            r_uj = np.dot(self.U[str(u)], self.V[str(j)].T) + self.biasV[str(j)]
-            r_uij = r_ui - r_uj
-            loss_func = -1.0 / (1 + np.exp(r_uij))
             
             self.U[str(u)].setflags(write=1)
             self.V[str(i)].setflags(write=1)
             self.V[str(j)].setflags(write=1) 
             
-            #update U and V
-            self.U[str(u)] += -self.lr * (loss_func * (self.V[str(i)] - self.V[str(j)]) + self.reg * self.U[str(u)])
-            self.V[str(i)] += -self.lr * (loss_func * self.U[str(u)] + self.reg * self.V[str(i)])
-            self.V[str(j)] += -self.lr * (loss_func * (-self.U[str(u)]) + self.reg * self.V[str(j)])
-            #update biasV
-            self.biasV[str(i)] += -self.lr * (loss_func + self.reg * self.biasV[str(i)])
-            self.biasV[str(j)] += -self.lr * (-loss_func + self.reg * self.biasV[j])
+            
+            
+            #r_ui = np.dot(self.U[str(u)], self.V[str(i)].T) + self.biasV[str(i)]
+            #r_uj = np.dot(self.U[str(u)], self.V[str(j)].T) + self.biasV[str(j)]
+            #r_uij = r_ui - r_uj
+       
+          
+            
+            #Method2
+            self.r_ui = np.dot(self.U[str(u)], self.V[str(i)].T)
+            self.r_uj = np.dot(self.U[str(u)], self.V[str(j)].T) 
+            self.r_uij =self. r_ui - self.r_uj
+            self.sigmoid = np.exp(-self.r_uij) / (1.0 + np.exp(-self.r_uij))        
+            # update using gradient descent
+            self.grad_u = self.sigmoid * (self.V[str(i)] - self.V[str(j)]) + self.reg * self.U[str(u)]
+            self.grad_i = self.sigmoid * -self.U[str(u)] + self.reg * self.V[str(i)]
+            self.grad_j = self.sigmoid * self.U[str(u)] + self.reg * self.V[str(j)]
+            self.U[str(u)] -= self.lr * self.grad_u
+            self.V[str(i)] -= self.lr * self.grad_i
+            self.V[str(j)] -= self.lr * self.grad_j
 
     def predict(self, user, item):
         #predict = np.mat(user) * np.mat(item.T)
@@ -110,7 +118,7 @@ class BPR(object):
     def fit(self):
         user_ratings_train = self.load_data(self.train_data_path)
         self.biasV=dict(zip(self.items_list,self.V))
-       
+      
         #self.load_test_data(self.test_data_path)
         #self.load_test_data(self.test_data_path)
         #for u in range(self.user_count):
