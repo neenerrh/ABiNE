@@ -36,7 +36,7 @@ class GraphUtils(object):
 
     def construct_training_graph(self, filename=None):
         if filename is None:
-            filename = os.path.join(self.model_path, "ratings.dat")
+            filename = os.path.join(self.model_path, "ratings_test.dat")
         edge_list_u_v = []
         edge_list_v_u = []
         with open(filename, encoding="UTF-8") as fin:
