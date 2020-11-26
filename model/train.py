@@ -387,7 +387,7 @@ def train_by_sampling(args):
         test_user, test_item, test_rate = dul.read_test_data(args.test_data)
     print("constructing graph....")
     gul = GraphUtils(model_path)
-    gul.construct_training_graph(None)
+    gul.construct_training_graph(args.train_data)
     edge_dict_u = gul.edge_dict_u
     edge_list = gul.edge_list
     walk_generator(gul,args)
