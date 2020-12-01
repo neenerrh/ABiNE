@@ -17,16 +17,19 @@ class BPR(object):
     num_k : item embedding的維度大小
     evaluation_at : recall@多少，及正樣本要排前幾名，我們才視為推薦正確
     '''
-    def __init__(self,model_path,node_u_num,node_v_num,vectors_u,vectors_v,users,items,items_list,n_train,train_user,train_item,dim,lam):
-        self.user_count = node_u_num
+    def __init__(self,model_path,node_u_num,node_v_num,vectors_u,vectors_v,users,items,users_list,items_list,n_train,train_user,train_item,dim,lam):
+        self.user_count = len(users_list)
         #print(self.user_count)
-        self.item_count = node_v_num
+        self.item_count = len(items_list)
+        self.user_embed= node_u_num
+        self.item_embed= node_v_num
         #latent_factors = 20
         self.n_epochs=10
         self.batch_size=512
         self.lr = lam  #learning rate
+       
         self.reg = 0.01
-        self.train_count = 10
+        self.train_count = 170
         self.train_data_path = '../data/mooc/ratings_test.dat'
         self.test_data_path = '../data/mooc/ratings_train.dat'
         self.size_u_i = self.user_count * self.item_count
@@ -37,8 +40,9 @@ class BPR(object):
         self.test_data = np.zeros((self.user_count, self.item_count))
         self.test = np.zeros(self.size_u_i)
         predict_ = np.zeros(self.size_u_i)
-        self.users=users
-        self.items=items
+        #self.users=users
+        #self.items=items
+        self.users_list=users_list
         self.items_list=items_list
 
     def load_data(self, path):
@@ -65,22 +69,21 @@ class BPR(object):
         for user in range(self.user_count):
             # sample a user
             #u = random.randint(1, self.user_count)
-            u = random.sample(self.users,1)
+            u = random.sample(self.users_list,1)
             #print(f"u {u} ")
             u=u[0]
             if str(u) not in user_ratings_train.keys():
-                #print(f"string u {str(u)} ")
-             
+                #print(f"string u {str(u)} ")             
                 continue
             # sample a positive item from the observed items
             i = random.sample(user_ratings_train[u], 1)
             i=i[0]
             #z = random.sample(user_ratings_train[u], 1)
             # sample a negative item from the unobserved items
-            j = random.sample(self.items, 1)
+            j = random.sample(self.items_list, 1)
             j=j[0]
             while j in user_ratings_train[u]:
-                j = random.sample(self.items, 1)
+                j = random.sample(self.items_list, 1)
                 j=j[0]
            
             
@@ -116,8 +119,13 @@ class BPR(object):
         return predict
 
     def fit(self):
+        print(self.lr)        
+        print(self.user_count)
+        print(self.user_embed)
+        print(self.item_count)
+        print(self.item_embed)
         user_ratings_train = self.load_data(self.train_data_path)
-        self.biasV=dict(zip(self.items_list,self.V))
+        #self.biasV=dict(zip(self.items_list,self.V))
       
         #self.load_test_data(self.test_data_path)
         #self.load_test_data(self.test_data_path)
