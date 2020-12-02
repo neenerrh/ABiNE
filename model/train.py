@@ -379,7 +379,11 @@ def train_by_sampling(args):
     items_list=list(train_item) + list(test_item)
     res2 = [] 
     [res2.append(x) for x in items_list if x not in res2]
-    items_list=res2   
+    items_list=res2 
+    users_list=list(train_user) + list(test_user)
+    res3 = [] 
+    [res3.append(x) for x in users_list if x not in res3]
+    users_list=res3    
     
  
     
@@ -422,7 +426,7 @@ def train_by_sampling(args):
         pointwise(vectors_u,vectors_v, edge_list, edge_dict_u,args.max_iter,alpha, beta, gamma, lam)
         
     else :
-        bpr=BPR(model_path,node_u_num,node_v_num,vectors_u,vectors_v,users,items,items_list,n_train,train_user,train_item,args.dim,args.lam) 
+        bpr=BPR(model_path,node_u_num,node_v_num,vectors_u,vectors_v,users,items,users_list,items_list,n_train,train_user,train_item,args.dim,args.lam) 
         vectors_u,vectors_v=bpr.fit()
         
      
@@ -757,9 +761,9 @@ def main():
                         help='for nc task, train/test split, a ratio ranging [0.0, 1.0]')
     parser.add_argument('--directed', default=False, action='store_true',
                         help='directed or undirected graph')
-    parser.add_argument('--weighted', default=False, action='store_true',
+    parser.add_argument('--weighted', default=True, action='store_true',
                         help='weighted or unweighted graph')
-    parser.add_argument('--save-emb', default=True, action='store_true',
+    parser.add_argument('--save-emb', default=False, action='store_true',
                         help='save emb to disk if True')
     parser.add_argument('--u-emb-file', default='../data/mooc/u_node_embs.txt',
                         help='node embeddings file; suggest: data_method_dim_embs.txt')
@@ -803,7 +807,7 @@ def main():
     parser.add_argument('--LINE-negative-ratio', default=5, type=int,
                         help='the negative ratio')
     # for walk based methods; some Word2Vec SkipGram parameters are not specified here
-    parser.add_argument('--number-walks', default=3, type=int,
+    parser.add_argument('--number-walks', default=10, type=int,
                         help='# of random walks of each node')
     parser.add_argument('--walk-length', default=80, type=int,
                         help='length of each random walk')
