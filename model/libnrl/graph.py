@@ -53,7 +53,7 @@ class Graph(object):
             #self.G.nodes[2683]['attr']=50
         #self.node_mapping()  # update node id index mapping
 
-    def read_edgelist(self, path, weighted=False, directed=False):
+    def read_edgelist(self, path, weighted=True, directed=False):
        
         """ read edge list format graph; \n
             support (un)weighted and (un)directed graph; \n
@@ -61,9 +61,9 @@ class Graph(object):
         """
         print('loading Graph U')
         if directed:
-            self.G = nx.read_edgelist(path, create_using=nx.DiGraph())
+            self.G = nx.read_weighted_edgelist(path, create_using=nx.DiGraph())
         else:
-            self.G = nx.read_edgelist(path, create_using=nx.Graph())
+            self.G = nx.read_weighted_edgelist(path, create_using=nx.Graph())
             #print(self.G.nodes)
             #self.G.nodes[1]['attr']=50
             
