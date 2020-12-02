@@ -353,8 +353,8 @@ class GraphUtils(object):
                 for col in range(indptr[row],indptr[row+1]):
                     r = row
                     c = indices[col]
-                    fw.write(index_row.get(r)+" "+index_item.get(c) +"\n")
-                    #fw.write(index_row.get(r)+"\t"+index_item.get(c)+"\t"+str(data[col_index])+"\n")
+                    #fw.write(index_row.get(r)+" "+index_item.get(c) +"\n")
+                    fw.write(index_row.get(r)+"\t"+index_item.get(c)+"\t"+str(data[col_index])+"\n")
                     col_index += 1
 
     def get_homogenous_graph(self, A, datafile, index_row, index_item):
