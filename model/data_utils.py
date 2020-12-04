@@ -54,7 +54,7 @@ class DataUtils(object):
                             test_item.add(item)
                             ftest.write(u + "\t" + item + "\t" + rating[u][item] + "\n")
         else:
-            with open(os.path.join(self.model_path, "ratings.dat"), "r") as fin, open(os.path.join(self.model_path, "ratings_train.dat"),"w") as ftrain, open(os.path.join(self.model_path,"ratings_test.dat"), "w") as ftest:
+            with open(os.path.join(self.model_path, "months1/ratings.dat"), "r") as fin, open(os.path.join(self.model_path, "months1/ratings_train.dat"),"w") as ftrain, open(os.path.join(self.model_path,"months1/ratings_test.dat"), "w") as ftest:
                 for line in fin.readlines():
                     user, item, rate = line.strip().split("\t")
                     if rating.get(user) is None:
