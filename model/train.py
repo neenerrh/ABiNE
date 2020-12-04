@@ -411,7 +411,7 @@ def train_by_sampling(args):
     else: 
         one.v_load_attr(args.v_attribute_file,args.method)
     
-    vectors_u,node_u_num,users=one.u_embedding(args.method,args.dim,args.ABRW_topk,args.ABRW_beta,args.ABRW_beta_mode,args.ABRW_alpha,args.number_walks,args.walk_length,args.window_size,args.workers,args.save_emb,args.u_emb_file)
+    vectors_u,node_u_num,users=one.u_embedding(args.method,args.dim,args.ABRW_topk,args.ABRW_beta,args.ABRW_beta_mode,args.ABRW_alpha,args.number_walks,args.walk_length,args.window_size,args.workers,args.save_emb,args.u_emb_file,args.uattr)
     
     vectors_v,node_v_num,items=one.v_embedding(args.method,args.dim,args.ABRW_topk,args.ABRW_beta,args.ABRW_beta_mode,args.ABRW_alpha,args.number_walks,args.walk_length,args.window_size,args.workers,args.save_emb,args.v_emb_file)
 
