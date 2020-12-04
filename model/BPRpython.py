@@ -8,6 +8,7 @@ from collections import defaultdict
 import numpy as np
 from sklearn.metrics import roc_auc_score
 #import scores
+import sys
 
 class BPR(object):
     '''
@@ -27,11 +28,11 @@ class BPR(object):
         self.n_epochs=10
         self.batch_size=512
         self.lr = lam  #learning rate
-       
+        self.train_users=users
         self.reg = 0.01
-        self.train_count = 170
-        self.train_data_path = '../data/mooc/ratings_test.dat'
-        self.test_data_path = '../data/mooc/ratings_train.dat'
+        self.train_count = 500
+        self.train_data_path = '../data/mooc/ratings_train.dat'
+        self.test_data_path = '../data/mooc/ratings_test.dat'
         self.size_u_i = self.user_count * self.item_count
     # latent_factors of U & V
         self.U = vectors_u
@@ -69,11 +70,14 @@ class BPR(object):
         for user in range(self.user_count):
             # sample a user
             #u = random.randint(1, self.user_count)
+            
             u = random.sample(self.users_list,1)
             #print(f"u {u} ")
             u=u[0]
             if str(u) not in user_ratings_train.keys():
                 #print(f"string u {str(u)} ")             
+                continue
+            if str(u) not in self.train_users:
                 continue
             # sample a positive item from the observed items
             i = random.sample(user_ratings_train[u], 1)
@@ -112,7 +116,7 @@ class BPR(object):
             self.U[str(u)] -= self.lr * self.grad_u
             self.V[str(i)] -= self.lr * self.grad_i
             self.V[str(j)] -= self.lr * self.grad_j
-
+        
     def predict(self, user, item):
         #predict = np.mat(user) * np.mat(item.T)
         predict = user * (item.T)
@@ -135,8 +139,20 @@ class BPR(object):
                     #self.test[u * self.item_count + item] = 1
                 #else:
                     #self.test[u * self.item_count + item] = 0
+        last_loss, count, epsilon = 0, 0, 1e-3
         for i in range(self.train_count):
+            s1 = "\r[%s%s]%0.2f%%"%("*"* i," "*(self.train_count-i),i*100.0/(self.train_count-1))
             self.train(user_ratings_train)
+            delta_loss = abs(self.sigmoid - last_loss)
+            if last_loss > self.sigmoid:
+                self.lr *= 1.05
+            else:
+                self.lr *= 0.95
+            last_loss = self.sigmoid
+            if delta_loss < epsilon:
+                break
+            sys.stdout.write(s1)
+            sys.stdout.flush()           
         return self.U,self.V
         #predict_matrix = self.predict(self.U, self.V)
         ## prediction
