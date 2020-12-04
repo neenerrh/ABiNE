@@ -53,7 +53,7 @@ class ABRW(object):
         #X=self.g.get_attr_mat(dense_output=False)
         
         # obtain biased transition mat -----------
-        self.T = self.get_biased_transition_mat(A,X)
+        #self.T = self.get_biased_transition_mat(A,X)
       
         # aim to generate a sequences of walks/sentences
         # apply weighted random walks on the reconstructed network based on biased transition mat
