@@ -30,7 +30,7 @@ class BPR(object):
         self.lr = lam  #learning rate
         self.train_users=users
         self.reg = 0.01
-        self.train_count = 500
+        self.train_count = 170
         self.train_data_path = '../data/mooc/ratings_train.dat'
         self.test_data_path = '../data/mooc/ratings_test.dat'
         self.size_u_i = self.user_count * self.item_count
@@ -139,20 +139,20 @@ class BPR(object):
                     #self.test[u * self.item_count + item] = 1
                 #else:
                     #self.test[u * self.item_count + item] = 0
-        last_loss, count, epsilon = 0, 0, 1e-3
+        #last_loss, count, epsilon = 0, 0, 1e-3
         for i in range(self.train_count):
-            s1 = "\r[%s%s]%0.2f%%"%("*"* i," "*(self.train_count-i),i*100.0/(self.train_count-1))
+            #s1 = "\r[%s%s]%0.2f%%"%("*"* i," "*(self.train_count-i),i*100.0/(self.train_count-1))
             self.train(user_ratings_train)
-            delta_loss = abs(self.sigmoid - last_loss)
-            if last_loss > self.sigmoid:
-                self.lr *= 1.05
-            else:
-                self.lr *= 0.95
-            last_loss = self.sigmoid
-            if delta_loss < epsilon:
-                break
-            sys.stdout.write(s1)
-            sys.stdout.flush()           
+            #delta_loss = abs(self.sigmoid - last_loss)
+            #if last_loss > self.sigmoid:
+                #self.lr *= 1.05
+            #else:
+                #self.lr *= 0.95
+            #last_loss = self.sigmoid
+            #if delta_loss < epsilon:
+                #break
+            #sys.stdout.write(s1)
+            #sys.stdout.flush()           
         return self.U,self.V
         #predict_matrix = self.predict(self.U, self.V)
         ## prediction
