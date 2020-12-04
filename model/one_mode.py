@@ -112,13 +112,13 @@ class OneMode(object):
             #\nthe # of nodes: {self.g.get_num_nodes()}; \nthe # of isolated nodes: {self.g.get_num_isolates()}; \nis directed graph: {self.g.get_isdirected()}')
         t1 = time.time()
         model = None
-        if  method == 'abrw' uattr==True:
+        if  method == 'abrw' and uattr==True:
             
                 model = abrw.ABRW(graph=self.g_u, dim=dim, topk=ABRW_topk,beta=ABRW_beta, beta_mode=ABRW_beta_mode,alpha=ABRW_alpha, number_walks=number_walks,walk_length=walk_length, window=window_size, workers=workers)
             
                 node_u_num,users= model.save_embeddings(emb_file + time.strftime(' %Y%m%d-%H%M%S', time.localtime()))
                 print(f'Save node embeddings in file: {emb_file}')
-        elif method == 'abrw' uattr==False:
+        elif method == 'abrw'and uattr==False:
                 model = abrw2.ABRW(graph=self.g_u, dim=dim, topk=ABRW_topk,beta=ABRW_beta, beta_mode=ABRW_beta_mode,alpha=ABRW_alpha, number_walks=number_walks,walk_length=walk_length, window=window_size, workers=workers)
             
                 node_u_num,users= model.save_embeddings(emb_file + time.strftime(' %Y%m%d-%H%M%S', time.localtime()))
