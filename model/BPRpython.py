@@ -31,8 +31,8 @@ class BPR(object):
         self.train_users=users
         self.reg = 0.01
         self.train_count = 170
-        self.train_data_path = '../data/mooc/months1/ratings_train.dat'
-        self.test_data_path = '../data/mooc/months1/ratings_test.dat'
+        self.train_data_path = '../data/mooc/months1/ratings_test.dat'
+        self.test_data_path = '../data/mooc/months1/ratings_train.dat'
         self.size_u_i = self.user_count * self.item_count
     # latent_factors of U & V
         self.U = vectors_u
