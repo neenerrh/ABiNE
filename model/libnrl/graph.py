@@ -92,7 +92,7 @@ class Graph(object):
                 self.G.nodes[vec[0]]['attr'] = np.array([float(x) for x in vec[1:]])
                 #print(vec self.G.nodes[vec[0]]['attr'])
                 #print(self.G.nodes())
-                self.node_mapping()
+            self.node_mapping()
         #print(self.G.nodes(data=True))       
       
             
