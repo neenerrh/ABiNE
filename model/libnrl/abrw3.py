@@ -51,8 +51,8 @@ class ABRW(object):
         #A=self.g.get_adj_mat(dense_output=False)
         #T_A = row_as_probdist(A, dense_output=False, preserve_all_zero_row=True)    # **sparse mat**
         #X=self.g.get_attr_mat(dense_output=False)
-        print(self.g.G.edges.data())
-        print(len(self.g.G.nodes()))
+        #print(self.g.G.edges.data())
+        #print(len(self.g.G.nodes()))
         # obtain biased transition mat -----------
         #self.T = self.get_biased_transition_mat(A,X)
       
