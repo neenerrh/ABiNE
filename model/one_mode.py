@@ -10,6 +10,7 @@ from libnrl.graph import *
 from libnrl.utils import *
 from libnrl import abrw #ANE method; Attributed Biased Random Walk
 from libnrl import abrw2 #ANE method; Attributed Biased Random Walk
+from libnrl import abrw3
 from libnrl import tadw #ANE method
 from libnrl import aane #ANE method
 from libnrl import attrcomb #ANE method
@@ -40,7 +41,7 @@ class OneMode(object):
         elif graph_format == 'edgelist':
              self.g_u.read_edgelist(path=graph_file, weighted=weighted, directed=directed)
              #self.g.read_edgelist(path=graph_file, weighted=weighted, directed=directed)
-         
+            
          #-------------------------------------load node attribute info------
         #is_ane = (method == 'abrw' or method == 'tadw' or method == 'attrpure' or method == 'attrcomb' or method == 'aane')
         #if is_ane:
@@ -116,13 +117,13 @@ class OneMode(object):
             
                 model = abrw.ABRW(graph=self.g_u, dim=dim, topk=ABRW_topk,beta=ABRW_beta, beta_mode=ABRW_beta_mode,alpha=ABRW_alpha, number_walks=number_walks,walk_length=walk_length, window=window_size, workers=workers)
             
-                node_u_num,users= model.save_embeddings(emb_file + time.strftime(' %Y%m%d-%H%M%S', time.localtime()))
-                print(f'Save node embeddings in file: {emb_file}')
+                #node_u_num,users= model.save_embeddings(emb_file + time.strftime(' %Y%m%d-%H%M%S', time.localtime()))
+                #print(f'Save node embeddings in file: {emb_file}')
         elif method == 'abrw'and uattr==False:
                 model = abrw2.ABRW(graph=self.g_u, dim=dim, topk=ABRW_topk,beta=ABRW_beta, beta_mode=ABRW_beta_mode,alpha=ABRW_alpha, number_walks=number_walks,walk_length=walk_length, window=window_size, workers=workers)
             
-                node_u_num,users= model.save_embeddings(emb_file + time.strftime(' %Y%m%d-%H%M%S', time.localtime()))
-                print(f'Save node embeddings in file: {emb_file}')
+                #node_u_num,users= model.save_embeddings(emb_file + time.strftime(' %Y%m%d-%H%M%S', time.localtime()))
+                #print(f'Save node embeddings in file: {emb_file}')
         elif method == 'aane':
             model = aane.AANE(graph=g, dim=args.dim, lambd=args.AANE_lamb, rho=args.AANE_rho, maxiter=args.AANE_maxiter, 
                             mode='comb') #mode: 'comb' struc and attri or 'pure' struc
@@ -144,13 +145,15 @@ class OneMode(object):
             exit(0)
         t2 = time.time()
         print(f'STEP3: end learning embeddings; time cost: {(t2-t1):.2f}s')
-        vectors_u=model.vectors
+        #vectors_u=model.vectors
+        walks=model.sentences
+        g_u=model.g
         #print(vectors_u)
-        return vectors_u,node_u_num,users
+        return walks,g_u
         
      
            
-    def v_embedding(self,method,dim, ABRW_topk,ABRW_beta,ABRW_beta_mode,ABRW_alpha,number_walks,walk_length,window_size,workers, save_emb,emb_file):
+    def v_embedding(self,method,dim, ABRW_topk,ABRW_beta,ABRW_beta_mode,ABRW_alpha,number_walks,walk_length,window_size,workers, save_emb,emb_file,vattr):
         #-----------------------------------STEP3: upstream embedding task-------------------------------------------------
         print('\nSTEP3: start learning embeddings......')
         #print(f'the graph: {self.g}; \nthe model used: {method}; \
@@ -158,12 +161,17 @@ class OneMode(object):
             #\nthe # of nodes: {self.g.get_num_nodes()}; \nthe # of isolated nodes: {self.g.get_num_isolates()}; \nis directed graph: {self.g.get_isdirected()}')
         t1 = time.time()
         model = None
-        if  method == 'abrw': 
-            model = abrw.ABRW(graph=self.g_v, dim=dim, topk=ABRW_topk,beta=ABRW_beta, beta_mode=ABRW_beta_mode,alpha=ABRW_alpha, number_walks=number_walks,walk_length=walk_length, window=window_size, workers=workers)
-            #model.save_embeddings(emb_file + time.strftime(' %Y%m%d-%H%M%S', time.localtime()))
-            #print(f'Save node embeddings in file: {emb_file}')
-            node_v_num,items=model.save_embeddings(emb_file + time.strftime(' %Y%m%d-%H%M%S', time.localtime()))
-            print(f'Save node embeddings in file: {emb_file}')
+        if  method == 'abrw' and vattr==True:
+            
+                model = abrw.ABRW(graph=self.g_v, dim=dim, topk=ABRW_topk,beta=ABRW_beta, beta_mode=ABRW_beta_mode,alpha=ABRW_alpha, number_walks=number_walks,walk_length=walk_length, window=window_size, workers=workers)
+            
+                #node_u_num,users= model.save_embeddings(emb_file + time.strftime(' %Y%m%d-%H%M%S', time.localtime()))
+                #print(f'Save node embeddings in file: {emb_file}')
+        elif method == 'abrw'and vattr==False:
+                model = abrw3.ABRW(graph=self.g_v, dim=dim, topk=ABRW_topk,beta=ABRW_beta, beta_mode=ABRW_beta_mode,alpha=ABRW_alpha, number_walks=number_walks,walk_length=walk_length, window=window_size, workers=workers)
+            
+                #node_u_num,users= model.save_embeddings(emb_file + time.strftime(' %Y%m%d-%H%M%S', time.localtime()))
+                #print(f'Save node embeddings in file: {emb_file}')
         elif method == 'aane':
             model = aane.AANE(graph=g, dim=args.dim, lambd=args.AANE_lamb, rho=args.AANE_rho, maxiter=args.AANE_maxiter, 
                             mode='comb') #mode: 'comb' struc and attri or 'pure' struc
@@ -185,9 +193,11 @@ class OneMode(object):
             exit(0)
         t2 = time.time()
         print(f'STEP3: end learning embeddings; time cost: {(t2-t1):.2f}s')
-        vectors_v=model.vectors
+        #vectors_v=model.vectors
+        walks=model.sentences
+        g_v=model.g
         #print(vectors_v)
-        return vectors_v,node_v_num,items
+        return walks,g_v
     
     def downstream(self):
         #---------------------------------------STEP4: downstream task-----------------------------------------------
