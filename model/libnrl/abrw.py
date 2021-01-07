@@ -53,28 +53,30 @@ class ABRW(object):
         X=self.g.get_attr_mat(dense_output=False)
         
         # obtain biased transition mat -----------
-        self.T = self.get_biased_transition_mat(A,X)
-      
+        self.T = self.get_biased_transition_mat(A,X)  
+        print(len(self.g.G.nodes()))
         # aim to generate a sequences of walks/sentences
         # apply weighted random walks on the reconstructed network based on biased transition mat
         kwargs["workers"] = kwargs.get("workers", 20)
         weighted_walker = walker.WeightedWalker(node_id_map=self.g.look_back_list, transition_mat=self.T, workers=kwargs["workers"])  # instance weighted walker
         sentences = weighted_walker.simulate_walks(num_walks=self.number_walks, walk_length=self.walk_length)
+        self.sentences=sentences
 
-        # feed the walks/sentences into Word2Vec Skip-Gram model for traning node embeddings
-        kwargs["sentences"] = sentences
-        kwargs["size"] = self.dim
-        kwargs["sg"] = 1  # use skip-gram; but see deepwalk which uses 'hs' = 1
-        kwargs["window"] = kwargs.get("window", 10)
-        kwargs["min_count"] = kwargs.get("min_count", 0)  # drop words/nodes if below the min_count freq; set to 0 to get all node embs
-        print("Learning node embeddings......")
-        word2vec = Word2Vec(**kwargs)
+        ## feed the walks/sentences into Word2Vec Skip-Gram model for traning node embeddings
+        #kwargs["sentences"] = sentences
+        #kwargs["size"] = self.dim
+        #kwargs["sg"] = 1  # use skip-gram; but see deepwalk which uses 'hs' = 1
+        #kwargs["window"] = kwargs.get("window", 10)
+        #kwargs["min_count"] = kwargs.get("min_count", 0)  # drop words/nodes if below the min_count freq; set to 0 to get all node embs
+        #print("Learning node embeddings......")
+        #word2vec = Word2Vec(**kwargs)
 
-        # save emb as a dict
-        self.vectors = {}
-        for word in self.g.G.nodes():
-            self.vectors[word] = word2vec.wv[word]
-        del word2vec
+        ## save emb as a dict
+        #self.vectors = {}
+        #for word in self.g.G.nodes():
+            #self.vectors[word] = word2vec.wv[word]
+        #del word2vec
+
 
     def get_biased_transition_mat(self, A, X):
         '''
@@ -204,14 +206,14 @@ class ABRW(object):
         print(f'ABRW biased transition matrix processing time: {(t5-t4):.2f}s')
         return T
 
-    def save_embeddings(self, filename):
-        fout = open(filename, 'w')
-        node_num = len(self.vectors.keys())
-        fout.write("{} {}\n".format(node_num, self.dim))
-        for node, vec in self.vectors.items():
-            fout.write("{} {}\n".format(node, ' '.join([str(x) for x in vec])))
-        fout.close()
-        return node_num,self.vectors.keys()
+    #def save_embeddings(self, filename):
+        #fout = open(filename, 'w')
+        #node_num = len(self.vectors.keys())
+        #fout.write("{} {}\n".format(node_num, self.dim))
+        #for node, vec in self.vectors.items():
+            #fout.write("{} {}\n".format(node, ' '.join([str(x) for x in vec])))
+        #fout.close()
+        #return node_num,self.vectors.keys()
 
 
 # ------------------------ utils draw_characteristic_curve ---------------------------
