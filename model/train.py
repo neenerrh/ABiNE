@@ -1244,18 +1244,16 @@ def train_by_negbatch(args):
     
     
     print("getting context and negative samples....")
-    context_dict_u, context_dict_v, node_u, node_v = get_context_and_negative_samples(gul,walks_u,walks_v,g_u,g_v, args)
+    context_dict_u, neg_dict_u, context_dict_v, neg_dict_v, node_u, node_v= get_context_and_negative_samples2(gul,walks_u,walks_v,g_u,g_v, args)
     node_list_u, node_list_v = {}, {}
     init_embedding_vectors(node_u, node_v, items_list,node_list_u, node_list_v, args)
     last_loss, count, epsilon  = 0, 0, 0.0001
     print(len(node_list_u.keys()))
     print(len(users_list))
     print(len(node_list_v.keys()))
-    t0 = time.time()
-    print("============== training ==============")
     #biasV = np.random.rand(len(items_list)) * 0.01
     #biasV=dict(zip(items_list,biasV))
-    
+    t0 = time.time()
     batch_size = args.batch_size
     if len(users_list) < batch_size:
             batch_size = len(users_list)
