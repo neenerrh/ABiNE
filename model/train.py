@@ -1280,7 +1280,7 @@ def train_by_negbatch(args):
 
                 #random.shuffle(edge_list)
                 for _ in range(batch_size):
-                    u = np.random.sample(users_list,1) 
+                    u = random.sample(users_list,1) 
            
                     u=u[0]
 
@@ -1292,15 +1292,15 @@ def train_by_negbatch(args):
                     #print(user_ratings_train[u])
                     #user_ratings_train[u] = np.array(user_ratings_train[u])
                     #print(user_ratings_train[u])
-                    i = np.random.sample(user_ratings_train[u],1)
+                    i = random.sample(user_ratings_train[u],1)
                     i=i[0]
             
             
                     # sample a negative item from the unobserved items
-                    j =np.random.replace(items_list,1)
+                    j =random.sample(items_list,1)
                     j=j[0]
                     while j in user_ratings_train[u]:
-                        j = np.random.sample(items_list,1)
+                        j = random.sample(items_list,1)
                         j=j[0]            
               
              
