@@ -20,14 +20,21 @@ class GraphUtils(object):
     def __init__(self, model_path):
         self.model_path = model_path
         self.G = nx.Graph()
+        self.G_test = nx.Graph()
         self.edge_dict_u = {}
         self.edge_dict_v = {}
+        self.test_edge_dict_u = {}
+        self.test_edge_dict_v = {}
         self.edge_list = []
         self.node_u = []
         self.node_v = []
+        self.test_edge_list = []
+        self.test_node_u = []
+        self.test_node_v = []
         self.authority_u, self.authority_v = {}, {}
         self.walks_u, self.walks_v = [], []
         self.G_u, self.G_v = None, None
+        self.G_u_test, self.G_v_test = None, None
         self.fw_u = os.path.join(self.model_path, "homogeneous_u.dat")
         self.fw_v = os.path.join(self.model_path, "homogeneous_v.dat")
         self.negs_u = {}
@@ -37,13 +44,13 @@ class GraphUtils(object):
 
     def construct_training_graph(self, filename=None):
         if filename is None:
-            filename = os.path.join(self.model_path, "ratings_test.dat")
+            filename = os.path.join(self.model_path, "ratings_train.csv")
         edge_list_u_v = []
         edge_list_v_u = []
         with open(filename, encoding="UTF-8") as fin:
             line = fin.readline()
             while line:
-                user, item, rating = line.strip().split("\t")
+                user, item, rating = line.strip().split(",")
                 if self.edge_dict_u.get(user) is None:
                     self.edge_dict_u[user] = {}
                 if self.edge_dict_v.get(item) is None:
@@ -70,7 +77,36 @@ class GraphUtils(object):
         #nx.draw(self.G)
         #plt.show()
         #plt.savefig("path.pdf")
-
+    def construct_test_graph(self, filename=None):
+        if filename is None:
+            filename = os.path.join(self.model_path, "ratings_test.csv")
+        test_edge_list_u_v = []
+        test_edge_list_v_u = []
+        with open(filename, encoding="UTF-8") as fin:
+            line = fin.readline()
+            while line:
+                user, item, rating = line.strip().split(",")
+                if self.test_edge_dict_u.get(user) is None:
+                    self.test_edge_dict_u[user] = {}
+                if self.test_edge_dict_v.get(item) is None:
+                    self.test_edge_dict_v[item] = {}
+                test_edge_list_u_v.append((user, item, float(rating)))
+                self.test_edge_dict_u[user][item] = float(rating)
+                self.test_edge_dict_v[item][user] = float(rating)
+                test_edge_list_v_u.append((item, user, float(rating)))
+                line = fin.readline()
+        # create bipartite graph
+        self.test_node_u = list(self.test_edge_dict_u.keys())
+        self.test_node_v = list(self.test_edge_dict_v.keys())
+       
+        self.test_node_u.sort()
+        
+        self.test_node_v.sort()
+        self.G_test.add_nodes_from(self.node_u, bipartite=0)
+        self.G_test.add_nodes_from(self.node_v, bipartite=1)
+        self.G_test.add_weighted_edges_from(test_edge_list_u_v)
+        self.test_edge_list = test_edge_list_u_v  
+      
     # def calculate_centrality(self, mode='hits'):
         # if mode == 'degree_centrality':
             # a = nx.degree_centrality(self.G)
@@ -236,6 +272,8 @@ class GraphUtils(object):
                     # else:
                         # fs.write(nodes[index]+" ")
     def get_negs(self,num_negs):
+        #self.edge_dict_v2=self.edge_dict_v .update(self.test_edge_dict_v ) 
+        #print(self.edge_dict_v2)
         self.negs_u, self.negs_v = get_negs_by_lsh(self.edge_dict_u,self.edge_dict_v,num_negs)
         ##print(len(self.negs_u),len(self.negs_v))
         return self.negs_u, self.negs_v
@@ -313,7 +351,7 @@ class GraphUtils(object):
                     context_dict[walk[iter]] = []
                     new_neg_dict[walk[iter]] = []
                 labels_list = []
-                if negs_dict[walk[iter]] is None:
+                if negs_dict.get(walk[iter]) is None:
                   continue
                 else:
                     negs = negs_dict[walk[iter]]
