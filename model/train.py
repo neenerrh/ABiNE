@@ -528,13 +528,13 @@ def train_by_sampling(args):
     #datafile= os.path.join(model_path,"ratings.dat")
     
     dul = DataUtils(model_path)
-    data = pd.read_csv('/content/ABiNE/data/mooc/months1/march_users1.csv')
-    data = data.rename(columns={'user  ': 'user', 'item ':'item','label ':'label'})
+    #data = pd.read_csv('/content/ABiNE/data/mooc/months1/march_users1.csv')
+    #data = data.rename(columns={'user  ': 'user', 'item ':'item','label ':'label'})
    
-    train_data,test_data= dul.split_by_ratio(data, test_size=args.testRatio)
-    train_data.to_csv('/content/ABiNE/data/mooc/months1/ratings_train.csv',index=False,header=False)
-    #files.download('/content/new_BiNE/data/mooc/months1/ratings_train.csv')
-    test_data.to_csv('/content/ABiNE/data/mooc/months1/ratings_test.csv',index=False,header=False)
+    #train_data,test_data= dul.split_by_ratio(data, test_size=args.testRatio)
+    #train_data.to_csv('/content/ABiNE/data/mooc/months1/ratings_train.csv',index=False,header=False)
+    ##files.download('/content/new_BiNE/data/mooc/months1/ratings_train.csv')
+    #test_data.to_csv('/content/ABiNE/data/mooc/months1/ratings_test.csv',index=False,header=False)
     
     train_user,train_item,train_rate=dul.read_train_data(args.train_data)
     test_user, test_item, test_rate = dul.read_test_data(args.test_data)
@@ -745,13 +745,13 @@ def train_by_neg(args):
     #datafile= os.path.join(model_path,"ratings.dat")
     
     dul = DataUtils(model_path)
-    data = pd.read_csv('/content/ABiNE/data/mooc/months1/march_users1.csv')
-    data = data.rename(columns={'user  ': 'user', 'item ':'item','label ':'label'})
+    #data = pd.read_csv('/content/ABiNE/data/mooc/months1/march_users1.csv')
+    #data = data.rename(columns={'user  ': 'user', 'item ':'item','label ':'label'})
    
-    train_data,test_data= dul.split_by_ratio(data, test_size=args.testRatio)
-    train_data.to_csv('/content/ABiNE/data/mooc/months1/ratings_train.csv',index=False,header=False)
-    #files.download('/content/new_BiNE/data/mooc/months1/ratings_train.csv')
-    test_data.to_csv('/content/ABiNE/data/mooc/months1/ratings_test.csv',index=False,header=False)
+    #train_data,test_data= dul.split_by_ratio(data, test_size=args.testRatio)
+    #train_data.to_csv('/content/ABiNE/data/mooc/months1/ratings_train.csv',index=False,header=False)
+    ##files.download('/content/new_BiNE/data/mooc/months1/ratings_train.csv')
+    #test_data.to_csv('/content/ABiNE/data/mooc/months1/ratings_test.csv',index=False,header=False)
     
     train_user,train_item,train_rate=dul.read_train_data(args.train_data)
     test_user, test_item, test_rate = dul.read_test_data(args.test_data)
@@ -966,13 +966,13 @@ def train_by_batch(args):
     #datafile= os.path.join(model_path,"ratings.dat")
     
     dul = DataUtils(model_path)
-    data = pd.read_csv('/content/ABiNE/data/mooc/months1/march_users1.csv')
-    data = data.rename(columns={'user  ': 'user', 'item ':'item','label ':'label'})
+    #data = pd.read_csv('/content/ABiNE/data/mooc/months1/march_users1.csv')
+    #data = data.rename(columns={'user  ': 'user', 'item ':'item','label ':'label'})
    
-    train_data,test_data= dul.split_by_ratio(data, test_size=args.testRatio)
-    train_data.to_csv('/content/ABiNE/data/mooc/months1/ratings_train.csv',index=False,header=False)
-    #files.download('/content/new_BiNE/data/mooc/months1/ratings_train.csv')
-    test_data.to_csv('/content/ABiNE/data/mooc/months1/ratings_test.csv',index=False,header=False)
+    #train_data,test_data= dul.split_by_ratio(data, test_size=args.testRatio)
+    #train_data.to_csv('/content/ABiNE/data/mooc/months1/ratings_train.csv',index=False,header=False)
+    ##files.download('/content/new_BiNE/data/mooc/months1/ratings_train.csv')
+    #test_data.to_csv('/content/ABiNE/data/mooc/months1/ratings_test.csv',index=False,header=False)
     
     train_user,train_item,train_rate=dul.read_train_data(args.train_data)
     test_user, test_item, test_rate = dul.read_test_data(args.test_data)
@@ -1191,13 +1191,13 @@ def train_by_negbatch(args):
     #datafile= os.path.join(model_path,"ratings.dat")
     
     dul = DataUtils(model_path)
-    data = pd.read_csv('/content/ABiNE/data/mooc/months1/march_users1.csv')
-    data = data.rename(columns={'user  ': 'user', 'item ':'item','label ':'label'})
+    #data = pd.read_csv('/content/ABiNE/data/mooc/months1/march_users1.csv')
+    #data = data.rename(columns={'user  ': 'user', 'item ':'item','label ':'label'})
    
-    train_data,test_data= dul.split_by_ratio(data, test_size=args.testRatio)
-    train_data.to_csv('/content/ABiNE/data/mooc/months1/ratings_train.csv',index=False,header=False)
-    #files.download('/content/new_BiNE/data/mooc/months1/ratings_train.csv')
-    test_data.to_csv('/content/ABiNE/data/mooc/months1/ratings_test.csv',index=False,header=False)
+    #train_data,test_data= dul.split_by_ratio(data, test_size=args.testRatio)
+    #train_data.to_csv('/content/ABiNE/data/mooc/months1/ratings_train.csv',index=False,header=False)
+    ##files.download('/content/new_BiNE/data/mooc/months1/ratings_train.csv')
+    #test_data.to_csv('/content/ABiNE/data/mooc/months1/ratings_test.csv',index=False,header=False)
     
     train_user,train_item,train_rate=dul.read_train_data(args.train_data)
     test_user, test_item, test_rate = dul.read_test_data(args.test_data)
