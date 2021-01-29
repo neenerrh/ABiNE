@@ -1185,7 +1185,7 @@ def train_by_negbatch(args):
         os.makedirs(model_path)
     alpha, beta, gamma, lam,reg = args.alpha, args.beta, args.gamma, args.lam,args.lr
     print('======== experiment settings =========')
-    print('alpha : %0.4f, beta : %0.4f, gamma : %0.4f, lam : %0.4f, p : %0.4f, ws : %d, ns : %d, maxT : % d, minT : %d, max_iter : %d, d : %d' % (alpha, beta, gamma, lam, args.p, args.ws, args.ns,args.maxT,args.minT,args.max_iter, args.d))
+    print('alpha : %0.4f, beta : %0.4f, gamma : %0.4f, lam : %0.4f, reg : %0.4f, ws : %d, ns : %d, l : % d, r : %d, max_iter : %d, top-N : %d,top-k : %d,r : %d' % (alpha, beta, gamma, lam, args.lr, args.ws, args.ns,args.walk_length,args.number_walks,args.max_iter, args.d,args.top_N,args.ABRW_topk))
     print('========== processing data ===========')
     #model_path1=os.path.join('../content/ABiNE/', args.model_name)
     #datafile= os.path.join(model_path,"ratings.dat")
@@ -1572,7 +1572,7 @@ def main():
     # for walk based methods; some Word2Vec SkipGram parameters are not specified here
     parser.add_argument('--number-walks', default=10, type=int,
                         help='# of random walks of each node')
-    parser.add_argument('--walk-length', default=80, type=int,
+    parser.add_argument('--walk-length', default=60, type=int,
                         help='length of each random walk')
     parser.add_argument('--window-size', default=10, type=int,
                         help='window size of skipgram model')
@@ -1589,7 +1589,7 @@ def main():
                         help='dropout rate (1 - keep probability)')
 
     args = parser.parse_args()
-    train_by_neg(args)
+    train_by_negbatch(args)
     
 
 
