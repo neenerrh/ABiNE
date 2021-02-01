@@ -1239,7 +1239,7 @@ def train_by_negbatch(args):
     walks_u,g_u=one.u_embedding(args.method,args.dim,args.ABRW_topk,args.ABRW_beta,args.ABRW_beta_mode,args.ABRW_alpha,args.number_walks,args.walk_length,args.window_size,args.workers,args.save_emb,args.u_emb_file,args.uattr)
     walks_v,g_v=one.v_embedding(args.method,args.dim,args.ABRW_topk,args.ABRW_beta,args.ABRW_beta_mode,args.ABRW_alpha,args.number_walks,args.walk_length,args.window_size,args.workers,args.save_emb,args.v_emb_file,args.vattr)   
     
-    print(g_v.G.nodes())
+    #print(g_v.G.nodes())
     items_list=g_v.G.nodes()
     
     
