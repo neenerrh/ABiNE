@@ -1510,9 +1510,9 @@ def main():
                         help='graph/network file')
     parser.add_argument('--v_graph_file', default= r'../data/mooc/homogeneous_v.dat',
                         help='graph/network file')
-    parser.add_argument('--u_attribute_file', default=r'../data/mooc/u_attr.txt',
+    parser.add_argument('--u_attribute_file', default=r'data/mooc/u_attr.txt',
                         help='node attribute/feature file')
-    parser.add_argument('--v_attribute_file', default=r'../data/mooc/v_attr.txt',
+    parser.add_argument('--v_attribute_file', default=r'data/mooc/v_attr.txt',
                         help='node attribute/feature file')
     parser.add_argument('--label-file', default='data/cora/cora_label.txt',
                         help='node label file')     
