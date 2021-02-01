@@ -1185,7 +1185,7 @@ def train_by_negbatch(args):
         os.makedirs(model_path)
     alpha, beta, gamma, lam,reg = args.alpha, args.beta, args.gamma, args.lam,args.lr
     print('======== experiment settings =========')
-    print('alpha : %0.4f, beta : %0.4f, gamma : %0.4f, lam : %0.4f, reg : %0.4f, ws : %d, ns : %d, l : % d, r : %d, max_iter : %d, top-N : %d,top-k : %d,r : %d' % (alpha, beta, gamma, lam, args.lr, args.ws, args.ns,args.walk_length,args.number_walks,args.max_iter, args.d,args.top_N,args.ABRW_topk))
+    print('alpha : %0.4f, beta : %0.4f, gamma : %0.4f, lam : %0.4f, reg : %0.4f, ws : %d, ns : %d, l : % d, r : %d, max_iter : %d,dim : %d top-n : %d,top-k : %d,ABRW-beta : %d' % (alpha, beta, gamma, lam, args.lr, args.ws, args.ns,args.walk_length,args.number_walks,args.max_iter, args.d,args.top_n,args.ABRW_topk,args.ABRW_beta))
     print('========== processing data ===========')
     #model_path1=os.path.join('../content/ABiNE/', args.model_name)
     #datafile= os.path.join(model_path,"ratings.dat")
