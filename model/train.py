@@ -1403,6 +1403,8 @@ def train_by_negbatch(args):
         print("============== testing ===============")
         auc_roc, auc_pr = link_prediction(args)
         print('link prediction metrics: AUC_ROC : %0.4f, AUC_PR : %0.4f' % (round(auc_roc,4), round(auc_pr,4)))
+    print('======== experiment settings =========')
+    print('alpha : %0.4f, beta : %0.4f, gamma : %0.4f, lam : %0.4f, reg : %0.4f, ws : %d, ns : %d, l : % d, r : %d, max_iter : %d,dim : %d top-n : %d,top-k : %d,ABRW-beta : %d' % (alpha, beta, gamma, lam, args.lr, args.ws, args.ns,args.walk_length,args.number_walks,args.max_iter, args.d,args.top_n,args.ABRW_topk,args.ABRW_beta))
 def ndarray_tostring(array):
     string = ""
     for item in array:
