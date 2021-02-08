@@ -217,25 +217,25 @@ def skip_gram(center, contexts, node_list, lam, pa):
     return update, loss
 
 
-def KL_divergence(edge_dict_u, u, v, vectors_u, vectors_v, lam, reg):
+def KL_divergence(edge_dict_u, u, v, node_list_u, node_list_v, lam, gamma):
     """
     KL-divergenceO1
     :param edge_dict_u:
     :param u:
     :param v:
-    :param vectors_u:
-    :param vectors_v:
+    :param node_list_u:
+    :param node_list_v:
     :param lam:
     :param gamma:
     :return:
     """
     loss = 0
-    #e_ij = edge_dict_u[u][v]
+    e_ij = edge_dict_u[u][v]
 
     update_u = 0
     update_v = 0
-    U = np.array(vectors_u[u])    
-    V = np.array(vectors_v[v])
+    U = np.array(node_list_u[u]['embedding_vectors'])
+    V = np.array(node_list_v[v]['embedding_vectors'])
     X = float(U.dot(V.T))
 
     sigmod = 1.0 / (1 + (math.exp(-X * 1.0)))
@@ -1405,6 +1405,157 @@ def train_by_negbatch(args):
         print('link prediction metrics: AUC_ROC : %0.4f, AUC_PR : %0.4f' % (round(auc_roc,4), round(auc_pr,4)))
     print('======== experiment settings =========')
     print('alpha : %0.4f, beta : %0.4f, gamma : %0.4f, lam : %0.4f, reg : %0.4f, ws : %d, ns : %d, l : % d, r : %d, max_iter : %d,dim : %d top-n : %d,top-k : %d,ABRW-beta : %d' % (alpha, beta, gamma, lam, args.lr, args.ws, args.ns,args.walk_length,args.number_walks,args.max_iter, args.d,args.top_n,args.ABRW_topk,args.ABRW_beta))
+def train_by_abpoint(args):
+    model_path = os.path.join('../', args.model_name)
+    if os.path.exists(model_path) is False:
+        os.makedirs(model_path)
+    alpha, beta, gamma, lam,reg = args.alpha, args.beta, args.gamma, args.lam,args.lr
+    print('======== experiment settings =========')
+    print('alpha : %0.4f, beta : %0.4f, gamma : %0.4f, lam : %0.4f, reg : %0.4f, ws : %d, ns : %d, l : % d, r : %d, max_iter : %d,dim : %d top-n : %d,top-k : %d,ABRW-beta : %d' % (alpha, beta, gamma, lam, args.lr, args.ws, args.ns,args.walk_length,args.number_walks,args.max_iter, args.d,args.top_n,args.ABRW_topk,args.ABRW_beta))
+    print('========== processing data ===========')
+    #model_path1=os.path.join('../content/ABiNE/', args.model_name)
+    #datafile= os.path.join(model_path,"ratings.dat")
+    
+    dul = DataUtils(model_path)
+    #data = pd.read_csv('/content/ABiNE/data/mooc/months1/march_users1.csv')
+    #data = data.rename(columns={'user  ': 'user', 'item ':'item','label ':'label'})
+   
+    #train_data,test_data= dul.split_by_ratio(data, test_size=args.testRatio)
+    #train_data.to_csv('/content/ABiNE/data/mooc/months1/ratings_train.csv',index=False,header=False)
+    ##files.download('/content/new_BiNE/data/mooc/months1/ratings_train.csv')
+    #test_data.to_csv('/content/ABiNE/data/mooc/months1/ratings_test.csv',index=False,header=False)
+    
+    train_user,train_item,train_rate=dul.read_train_data(args.train_data)
+    test_user, test_item, test_rate = dul.read_test_data(args.test_data)
+    n_train=len(train_item) 
+    items=list(train_item) + list(test_item)
+    res2 = [] 
+    [res2.append(x) for x in items if x not in res2]
+    items=res2 
+    users_list=list(train_user) + list(test_user)
+    res3 = [] 
+    [res3.append(x) for x in users_list if x not in res3]
+    users_list=res3   
+
+    print(len(train_item))
+    print(len(test_item)) 
+    print(len(items)) 
+    user_ratings_train,items= dul.load_data(args.train_data)
+ 
+    print("constructing graph....")
+    gul = GraphUtils(model_path)
+    gul.construct_training_graph(args.train_data)
+   
+    edge_dict_u = gul.edge_dict_u
+    edge_list = gul.edge_list
+    
+    walk_generator(gul,args)
+    model_path1 = os.path.join('../', 'model')    
+    one=OneMode(model_path)
+    
+    one.u_load_data(args.u_graph_file,args.weighted,args.directed,args.graph_format,args.u_attribute_file,args.method)
+    one.v_load_data(args.v_graph_file,args.weighted,args.directed,args.graph_format,args.v_attribute_file,args.method)
+    
+    if args.uattr == True:
+        one.u_load_attr(args.u_attribute_file,args.method)   
+        
+    if args.vattr == True: 
+        one.v_load_attr(args.v_attribute_file,args.method)
+    
+    walks_u,g_u=one.u_embedding(args.method,args.dim,args.ABRW_topk,args.ABRW_beta,args.ABRW_beta_mode,args.ABRW_alpha,args.number_walks,args.walk_length,args.window_size,args.workers,args.save_emb,args.u_emb_file,args.uattr)
+    walks_v,g_v=one.v_embedding(args.method,args.dim,args.ABRW_topk,args.ABRW_beta,args.ABRW_beta_mode,args.ABRW_alpha,args.number_walks,args.walk_length,args.window_size,args.workers,args.save_emb,args.v_emb_file,args.vattr)   
+    
+    #print(g_v.G.nodes())
+    items_list=g_v.G.nodes()
+    
+    
+    print("getting context and negative samples....")
+    context_dict_u, neg_dict_u, context_dict_v, neg_dict_v, node_u, node_v= get_context_and_negative_samples2(gul,walks_u,walks_v,g_u,g_v, args)
+    node_list_u, node_list_v = {}, {}
+    init_embedding_vectors(node_u, node_v, items_list,node_list_u, node_list_v, args)
+    last_loss, count, epsilon  = 0, 0, 0.0001
+    print(len(node_list_u.keys()))
+    print(len(users_list))
+    print(len(node_list_v.keys()))
+    #biasV = np.random.rand(len(items_list)) * 0.01
+    #biasV=dict(zip(items_list,biasV))
+    print("============== training ==============")
+    for iter in range(0, args.max_iter):
+        s1 = "\r[%s%s]%0.2f%%"%("*"* iter," "*(args.max_iter-iter),iter*100.0/(args.max_iter-1))
+        loss = 0
+        visited_u = dict(zip(node_list_u.keys(), [0] * len(node_list_u.keys())))
+        visited_v = dict(zip(node_list_v.keys(), [0] * len(node_list_v.keys())))
+        random.shuffle(edge_list)
+        for i in range(len(edge_list)):
+            u, v, w = edge_list[i]
+              
+            length = len(context_dict_u[u])
+            random.shuffle(context_dict_u[u])
+            if visited_u.get(u) < length:
+               
+                index_list = list(range(visited_u.get(u),min(visited_u.get(u)+1,length)))
+                for index in index_list:
+                    context_u = context_dict_u[u][index]
+                    neg_u = neg_dict_u[u][index]
+                    # center,context,neg,node_list,eta
+                    for z in context_u:
+                        tmp_z, tmp_loss = skip_gram2(u, z, neg_u, node_list_u, lam, alpha)
+                        node_list_u[z]['embedding_vectors'] += tmp_z
+                        loss += tmp_loss
+                visited_u[u] = index_list[-1]+3
+                
+          
+            length = len(context_dict_v[v])
+            random.shuffle(context_dict_v[v])
+            if visited_v.get(v) < length:
+                # print(v)
+                index_list = list(range(visited_v.get(v),min(visited_v.get(v)+1,length)))
+                for index in index_list:
+                    context_v = context_dict_v[v][index]
+                    neg_v = neg_dict_v[v][index]
+                    # center,context,neg,node_list,eta
+                    for z in context_v:
+                        tmp_z, tmp_loss = skip_gram2(v, z, neg_v, node_list_v, lam, beta)
+                        node_list_v[z]['embedding_vectors'] += tmp_z
+                        loss += tmp_loss
+                visited_v[v] = index_list[-1]+3
+            # adj_list_u= node_list_u[z]['embedding_vectors'].dot(context_dict_u[u].T)
+                # adj_list_v= node_list_v[z]['embedding_vectors'].dot(context_dict_v[v].T)
+            #save_adj_to_file(node_list_u,node_list_v,model_path,args)  
+                
+
+            update_u, update_v, tmp_loss = KL_divergence(edge_dict_u, u, v, node_list_u, node_list_v, lam, gamma)
+            loss += tmp_loss
+            node_list_u[u]['embedding_vectors'] += update_u
+            node_list_v[v]['embedding_vectors'] += update_v
+
+        delta_loss = abs(loss - last_loss)
+        if last_loss > loss:
+            lam *= 1.05
+        else:
+            lam *= 0.95
+        last_loss = loss
+        #print(delta_loss)
+        print(loss)
+        print(last_loss)
+        if delta_loss < epsilon:
+            break
+        sys.stdout.write(s1)
+        sys.stdout.flush()
+  
+    t1 = time.time()
+    print(f'Training done: end of training ; time cost: {(t1-t0):.2f}s')        
+    print("")
+    if args.rec:
+        print("============== testing ===============")
+        f1, map, mrr, mndcg,recall = top_N(test_user,test_item,test_rate,node_list_u,node_list_v,args.top_n)
+        print('recommendation metrics: F1 : %0.4f, MAP : %0.4f, MRR : %0.4f, NDCG : %0.4f, RECALL : %0.4f' % (round(f1,4), round(map,4), round(mrr,4), round(mndcg,4),round(recall,4)))
+    if args.lip:
+        print("============== testing ===============")
+        auc_roc, auc_pr = link_prediction(args)
+        print('link prediction metrics: AUC_ROC : %0.4f, AUC_PR : %0.4f' % (round(auc_roc,4), round(auc_pr,4)))
+    print('======== experiment settings =========')
+    print('alpha : %0.4f, beta : %0.4f, gamma : %0.4f, lam : %0.4f, reg : %0.4f, ws : %d, ns : %d, l : % d, r : %d, max_iter : %d,dim : %d top-n : %d,top-k : %d,ABRW-beta : %d' % (alpha, beta, gamma, lam, args.lr, args.ws, args.ns,args.walk_length,args.number_walks,args.max_iter, args.d,args.top_n,args.ABRW_topk,args.ABRW_beta))
 def ndarray_tostring(array):
     string = ""
     for item in array:
@@ -1591,7 +1742,7 @@ def main():
                         help='dropout rate (1 - keep probability)')
 
     args = parser.parse_args()
-    train_by_negbatch(args)
+    train_by_abpoint(args)
     
 
 
