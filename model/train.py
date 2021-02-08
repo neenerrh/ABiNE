@@ -1544,7 +1544,7 @@ def train_by_abpoint(args):
         sys.stdout.flush()
   
     t1 = time.time()
-    print(f'Training done: end of training ; time cost: {(t1-t0):.2f}s')        
+         
     print("")
     if args.rec:
         print("============== testing ===============")
