@@ -11,7 +11,7 @@ import random
 import time
 from itertools import chain
 import numpy as np
-from networkx import nx
+import networkx as nx
 
 
 # ===========================================ABRW-weighted-walker============================================
