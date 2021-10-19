@@ -1742,7 +1742,7 @@ def main():
                         help='dropout rate (1 - keep probability)')
 
     args = parser.parse_args()
-    train_by_abpoint(args)
+    train_by_negbatch(args)
     
 
 
