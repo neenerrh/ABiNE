@@ -1,0 +1,29 @@
+------------ABiNENegbatch.txt----------------------------------------
+======== experiment settings =========
+alpha : 0.0100, beta : 0.0100, gamma : 0.1000, lam : 0.0250, reg : 0.0100, ws : 5, ns : 4, l :  80, r : 3, max_iter : 200,dim : 128 top-n : 20,top-k : 30,ABRW-beta : 0
+========== processing data ===========
+103
+72
+103
+constructing graph....
+
+STEP1: start loading data......
+loading Graph U
+
+STEP1: start loading data......
+loading Graph U
+
+STEP3: start learning embeddings......
+7301
+Walk iteration: 1/3; time cost: 21.31
+ALL running time: 69
+======== experiment settings =========
+alpha : 0.0100, beta : 0.0100, gamma : 0.1000, lam : 0.0250, reg : 0.0100, ws : 5, ns : 4, l :  80, r : 3, max_iter : 200,dim : 128 top-n : 20,top-k : 30,ABRW-beta : 0
+========== processing data ===========
+103
+72
+103
+constructing graph....
+
+STEP1: start loading data......
+loading Graph U
